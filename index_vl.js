@@ -3,6 +3,7 @@ import { GLTFLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/l
 
 import { Gesture } from "https://cdn.skypack.dev/@use-gesture/vanilla";
 
+const IS_DEBUG = window.location.port.length > 0;
 const GLYPH_FROM_ROTATION = Math.PI * -2;
 const glyphs = {
     a: {
@@ -73,7 +74,7 @@ const glyphs = {
 
 const ENV_MAP_PATH =
     "https://uploads-ssl.webflow.com/603379589922195849a7718c/644ed7aeae089038fc622679_envmap.jpg";
-const VAN_LOON_BLUE = new THREE.Color("rgb(0,60,255)");
+const VAN_LOON_BLUE = new THREE.Color("rgb(0,120,255)");
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
@@ -124,13 +125,19 @@ const gesture = new Gesture(window, {
         _scrollPosY = offsetY;
     },
     onMove: (state) => {
+        const [dirX, dirY] = state.direction;
+
         const [x, y] = state.delta;
+        const [velX, velY] = state.velocity;
         const range = 100;
         _mouseMoveVelocity.set(
-            THREE.MathUtils.mapLinear(x, -range, range, -1, 1),
-            THREE.MathUtils.mapLinear(y, -range, range, -1, 1),
+            // THREE.MathUtils.mapLinear(x, -range, range, -1, 1),
+            // THREE.MathUtils.mapLinear(y, -range, range, -1, 1),
+            velX * dirX * -1,
+            velY * dirY * -1,
             0
         );
+        console.log(_mouseMoveVelocity);
     },
 });
 
@@ -156,7 +163,7 @@ const rootEl = document.querySelector(".three_root");
 renderer.setSize(window.innerWidth, window.innerHeight);
 rootEl.appendChild(renderer.domElement);
 
-// TODO:
+// TODO: rewrite to re-use glyph meshes then transform position
 const el = document.querySelector("h1");
 glyphs.a.initialTransform.position.set(
     pixelsToUnits(window.innerWidth / -2),
@@ -215,34 +222,34 @@ glyphResults.forEach((result, i) => {
         // envMap: envMapTexture,
         ...glyphObj.material,
         roughness: 1,
-        metalness: 1,
+        metalness: 0.6,
         color: VAN_LOON_BLUE,
         //emissive: new THREE.Color("#751aff"),
         envMap: envMapTexture,
         envMapIntensity: 10,
     });
 
+    // Used only to apply initial position and later on as initial ref point
     const initialGroup = new THREE.Group();
+    // Used for mouse move and scroll interactions
     const interactionGroup = new THREE.Group();
+    // Used for in/out animation
+    const animationGroup = new THREE.Group();
 
     glyphData.__mesh = glyphScene;
 
     glyphData.__initialGroup = initialGroup;
     glyphData.__interactionGroup = interactionGroup;
+    glyphData.__animationGroup = animationGroup;
 
-    // glyphData.__mesh.__pos = new THREE.Vector3().copy(
-    //     glyphData.__mesh.position
-    // );
-    // glyphData.__mesh.__rot = new THREE.Euler().copy(glyphData.__mesh.rotation);
-    // glyphData.__interactionGroup.__pos = new THREE.Vector3().copy(
-    //     glyphData.__interactionGroup.position
-    // );
-    // glyphData.__interactionGroup.__rot = new THREE.Euler().copy(
-    //     glyphData.__interactionGroup.rotation
-    // );
+    // Pos will be handled in loop,
+    // if we handle it here we'll get a weird offset from origin
+    glyphScene.scale.setScalar(glyphData.initialTransform.scale);
+    glyphScene.rotation.copy(glyphData.initialTransform.rotation);
+
+    // All groups should copy affine transforms from initial position
     glyphData.__initialGroup.position.copy(glyphData.initialTransform.position);
     glyphData.__initialGroup.rotation.copy(glyphData.initialTransform.rotation);
-    glyphData.__initialGroup.scale.copy(glyphData.initialTransform.scale);
 
     glyphData.__interactionGroup.position.copy(
         glyphData.initialTransform.position
@@ -250,8 +257,12 @@ glyphResults.forEach((result, i) => {
     glyphData.__interactionGroup.rotation.copy(
         glyphData.initialTransform.rotation
     );
-    glyphData.__interactionGroup.scale.setScalar(
-        glyphData.initialTransform.scale
+
+    glyphData.__animationGroup.position.copy(
+        glyphData.initialTransform.position
+    );
+    glyphData.__animationGroup.rotation.copy(
+        glyphData.initialTransform.rotation
     );
 
     scene.add(glyphData.__interactionGroup);
@@ -263,7 +274,7 @@ const clock = new THREE.Clock();
 // const dirLight = new THREE.DirectionalLight(new THREE.Color("#db4dff"), 1);
 // const dirLight = new THREE.DirectionalLight(new THREE.Color("#db4dff"), 1);
 // dirLight.position.set(0, pixelsToUnits(window.innerHeight / -2), 0);
-scene.add(new THREE.AmbientLight(0xffffff, 0.1));
+//scene.add(new THREE.AmbientLight(0xffffff, 0.1));
 // scene.add(dirLight);
 
 function render() {
@@ -280,28 +291,31 @@ function render() {
     const nextY = pixelsToUnits(_scrollPosY) * -1;
     camera.position.y = THREE.MathUtils.lerp(camera.position.y, nextY, 0.5);
 
+    //camera.position.y -= pixelsToUnits(_scrollVelY);
+
     traverseGlyphs((glyph, i) => {
         // Rotation on mouse move
+        const influence = 0.005;
         glyph.__interactionGroup.rotation.x = THREE.MathUtils.lerp(
-            glyph.__interactionGroup.rotation.z,
-            glyph.__initialGroup.rotation.z +
-                (_mouseMoveVelocity.y + glyph.__rand),
-            0.001 + glyph.__rand * i * 0.01
+            glyph.__interactionGroup.rotation.x,
+            glyph.__initialGroup.rotation.x -
+                _mouseMoveVelocity.y * glyph.__rand,
+            influence + glyph.__rand * i * influence
         );
         glyph.__interactionGroup.rotation.y = THREE.MathUtils.lerp(
             glyph.__interactionGroup.rotation.y,
-            glyph.__initialGroup.rotation.y +
-                (_mouseMoveVelocity.x + glyph.__rand),
-            0.01 + glyph.__rand * i * 0.01
+            glyph.__initialGroup.rotation.y -
+                _mouseMoveVelocity.x * glyph.__rand,
+            influence + glyph.__rand * i * influence
         );
 
         // Rotation on scroll
-        glyph.__interactionGroup.rotation.z = THREE.MathUtils.lerp(
-            glyph.__interactionGroup.rotation.z,
-            _scrollRot + (_scrollVelocity.y * -1 + glyph.__rand),
+        // glyph.__interactionGroup.rotation.z = THREE.MathUtils.lerp(
+        //     glyph.__interactionGroup.rotation.z,
+        //     _scrollRot + (_scrollVelocity.y * -2 + glyph.__rand),
 
-            0.01 + glyph.__rand * i * 0.1
-        );
+        //     0.01 + glyph.__rand * i * 0.4
+        // );
 
         let idleT = Math.sin(t * 0.5 + i * 10);
         // Normalize -1 - 1 to 0 - 1
