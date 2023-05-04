@@ -74,7 +74,12 @@ const glyphs = {
 
 const ENV_MAP_PATH =
     "https://uploads-ssl.webflow.com/603379589922195849a7718c/644ed7aeae089038fc622679_envmap.jpg";
-const VAN_LOON_BLUE = new THREE.Color("rgb(0,120,255)");
+const VAN_LOON_BLUE = new THREE.Color("rgb(0,90,255)");
+const VAN_LOON_FRESNEL = new THREE.Color("rgb(106,36,245)");
+
+window.onbeforeunload = function () {
+    window.scrollTo(0, 0);
+};
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
@@ -107,6 +112,9 @@ const _scrollVelocity = new THREE.Vector3();
 let _scrollRot = 0;
 let _scrollPosY = 0;
 let _scrollVelY = 0;
+let __scrollVelY = 0;
+let _scrollDirY = 0;
+
 const mouseMoveVelocity = new THREE.Vector3();
 const _mouseMoveVelocity = new THREE.Vector3();
 
@@ -115,14 +123,17 @@ const gesture = new Gesture(window, {
         const [x, y] = state.delta;
         const [_, velY] = state.delta;
         const [__, offsetY] = state.offset;
+        const [___, dirY] = state.direction;
         const range = 100;
         _scrollVelocity.set(
             THREE.MathUtils.mapLinear(x, -range, range, -1, 1),
             THREE.MathUtils.mapLinear(y, -range, range, -1, 1),
             0
         );
+
         _scrollVelY = velY;
         _scrollPosY = offsetY;
+        _scrollDirY = dirY;
     },
     onMove: (state) => {
         const [dirX, dirY] = state.direction;
@@ -137,7 +148,6 @@ const gesture = new Gesture(window, {
             velY * dirY * -1,
             0
         );
-        console.log(_mouseMoveVelocity);
     },
 });
 
@@ -214,19 +224,63 @@ glyphResults.forEach((result, i) => {
 
     const glyphObj = glyphScene.children[0].children[0].children[0];
     glyphObj.geometry.center();
-    // glyphObj.material.onBeforeCompile = function (shader) {
-    //     // TODO:
-    // };
+    glyphObj.material.userData = glyphObj.material.uniforms = {
+        uFresnelColor: { value: VAN_LOON_FRESNEL.convertLinearToSRGB() },
+    };
+    glyphObj.material.onBeforeCompile = function (shader) {
+        shader.vertexShader = shader.vertexShader.replace(
+            "#include <common>",
+            /*glsl*/ `
+            #include <common>
+
+            varying vec3 vPositionW;
+            varying vec3 vNormalW;
+        `
+        );
+
+        shader.vertexShader = shader.vertexShader.replace(
+            "#include <begin_vertex>",
+            /*glsl*/ `
+            #include <begin_vertex>
+
+            vPositionW = normalize(vec3(modelViewMatrix * vec4(position, 1.0)).xyz);
+            vNormalW = normalize(normalMatrix * normal);
+        `
+        );
+
+        shader.fragmentShader = shader.fragmentShader.replace(
+            "#include <common>",
+            /*glsl*/ `
+            #include <common>
+
+            varying vec3 vPositionW;
+            varying vec3 vNormalW;
+
+            uniform vec3 uFresnelColor;
+        `
+        );
+
+        shader.fragmentShader = shader.fragmentShader.replace(
+            "#include <dithering_fragment>",
+            /*glsl*/ `
+                #include <dithering_fragment>
+                
+                float fresnelTerm = ( 1.0 - -min(dot(vPositionW, normalize(vNormalW) ), 0.0) );    
+                gl_FragColor += vec4(vec3(0.3, 0.0, .8), 1.) * vec4(fresnelTerm);
+                //gl_FragColor = vec4(1., 0., 0., 1.);
+        `
+        );
+    };
 
     glyphObj.material = new THREE.MeshStandardMaterial({
         // envMap: envMapTexture,
         ...glyphObj.material,
         roughness: 1,
-        metalness: 0.6,
+        metalness: 0.8,
         color: VAN_LOON_BLUE,
         //emissive: new THREE.Color("#751aff"),
-        envMap: envMapTexture,
-        envMapIntensity: 10,
+        // envMap: envMapTexture,
+        // envMapIntensity: 10,
     });
 
     // Used only to apply initial position and later on as initial ref point
@@ -286,6 +340,7 @@ function render() {
     _mouseMoveVelocity.lerp(mouseMoveVelocity, 0.01);
     _scrollVelocity.lerp(scrollVelocity, 0.001);
     _scrollRot = THREE.MathUtils.lerp(_scrollRot, _scrollVelocity.y, 0.01);
+    __scrollVelY = THREE.MathUtils.lerp(__scrollVelY, _scrollVelY, 0.1);
 
     // const nextCameraY = THREE.MathUtils.mapLinear(window.innerHeight);
     const nextY = pixelsToUnits(_scrollPosY) * -1;
@@ -310,12 +365,9 @@ function render() {
         );
 
         // Rotation on scroll
-        // glyph.__interactionGroup.rotation.z = THREE.MathUtils.lerp(
-        //     glyph.__interactionGroup.rotation.z,
-        //     _scrollRot + (_scrollVelocity.y * -2 + glyph.__rand),
 
-        //     0.01 + glyph.__rand * i * 0.4
-        // );
+        // glyph.__interactionGroup.rotation.x +=
+        //     __scrollVelY * _scrollDirY * -1 * 0.004;
 
         let idleT = Math.sin(t * 0.5 + i * 10);
         // Normalize -1 - 1 to 0 - 1
