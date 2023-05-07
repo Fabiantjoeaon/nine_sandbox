@@ -5,77 +5,78 @@ import { Gesture } from "https://cdn.skypack.dev/@use-gesture/vanilla";
 
 const IS_DEBUG = window.location.port.length > 0;
 const GLYPH_FROM_ROTATION = Math.PI * -2;
-const glyphs = {
-    a: {
-        initialTransform: {
-            position: new THREE.Vector3(-1, 3, 0),
 
-            rotation: new THREE.Euler(-0.1, Math.PI - GLYPH_FROM_ROTATION, 0.4),
-            scale: 0.7,
-        },
+const GLYPH_SRC = [
+    {
+        name: "A",
         src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/644eda97b6958181ae521001_a_glyph_van_loon_WF.gltf.txt",
-
-        __mesh: null,
-        __interactionGroup: null,
-        __rand: Math.random(),
-        __objIn: { value: 0 },
     },
-    o: {
-        initialTransform: {
-            position: new THREE.Vector3(3, -1, 0),
-
-            rotation: new THREE.Euler(),
-            scale: 0.6,
-        },
+    {
+        name: "O",
         src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/644eda97ac066513ce630f14_o_glyph_van_loon_WF.gltf.txt",
-
-        __mesh: null,
-        __interactionGroup: null,
-        __rand: Math.random(),
-        __objIn: { value: 0 },
     },
-    n: {
-        initialTransform: {
-            position: new THREE.Vector3(-3, -4, 0),
-
-            rotation: new THREE.Euler(),
-            scale: 0.7,
-        },
+    {
+        name: "N",
         src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/644eda970014987c0babbbba_n_glyph_van_loon_WF.gltf.txt",
-
-        __mesh: null,
-        __interactionGroup: null,
-        __rand: Math.random(),
-        __objIn: { value: 0 },
     },
-    // l: {
-    //     initialTransform: {
-    //         position: new THREE.Vector3(-3, -4, 0),
-    //         rotation: new THREE.Euler(-0.1, Math.PI - GLYPH_FROM_ROATION, 0.4),
-    //         scale: 0.7,
-    //     },
-    //     src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/644eda97442c994d73c035fe_l_glyph_van_loon_WF.gltf.txt",
-    //     mesh: null,
-    //     splineLayerName: "N",
-    //     __objIn: { value: 0 },
-    // },
-    // v: {
-    //     initialTransform: {
-    //         position: new THREE.Vector3(-3, -4, 0),
-    //         rotation: new THREE.Euler(-0.1, Math.PI - GLYPH_FROM_ROATION, 0.4),
-    //         scale: 0.7,
-    //     },
-    //     src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/644eda97228bee398ef568d3_v_glyph_van_loon_WF.gltf.txt",
-    //     mesh: null,
-    //     splineLayerName: "N",
-    //     __objIn: { value: 0 },
-    // },
-};
+    {
+        name: "L",
+        src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/644eda97442c994d73c035fe_l_glyph_van_loon_WF.gltf.txt",
+    },
+    {
+        name: "V",
+        src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/644eda97228bee398ef568d3_v_glyph_van_loon_WF.gltf.txt",
+    },
+];
+
+const glyphs = [
+    {
+        type: "A",
+
+        element: "h1",
+        elementOffset: new THREE.Vector3(),
+        elementPositionX: "left",
+        elementPositionY: "top",
+
+        rotation: new THREE.Euler(-0.1, Math.PI - GLYPH_FROM_ROTATION, 0.4),
+        scale: 0.7,
+    },
+    {
+        type: "O",
+
+        element: "h2",
+        elementOffset: new THREE.Vector3(),
+        elementPositionX: "left",
+        elementPositionY: "top",
+
+        rotation: new THREE.Euler(),
+        scale: 0.6,
+    },
+    {
+        type: "N",
+
+        element: "h3",
+        elementOffset: new THREE.Vector3(),
+        elementPositionX: "right",
+        elementPositionY: "bottom",
+
+        rotation: new THREE.Euler(),
+        scale: 0.7,
+    },
+].map((g) => ({
+    ...g,
+    position: new THREE.Vector3(),
+    __mesh: null,
+    __interactionGroup: null,
+    __rand: Math.random(),
+    __objIn: { value: 0 },
+}));
 
 const ENV_MAP_PATH =
     "https://uploads-ssl.webflow.com/603379589922195849a7718c/644ed7aeae089038fc622679_envmap.jpg";
-const VAN_LOON_BLUE = new THREE.Color("rgb(0,90,255)");
-const VAN_LOON_FRESNEL = new THREE.Color("rgb(106,36,245)");
+const VAN_LOON_BLUE = new THREE.Color("rgb(0,50,255)");
+// const VAN_LOON_FRESNEL = new THREE.Color("rgb(50,50,200)");
+const VAN_LOON_FRESNEL = new THREE.Color("rgb(255,255,255)");
 
 window.onbeforeunload = function () {
     window.scrollTo(0, 0);
@@ -94,10 +95,6 @@ function easeInOutQuint(x) {
     return x < 0.5 ? 16 * x * x * x * x * x : 1 - Math.pow(-2 * x + 2, 5) / 2;
 }
 
-function traverseGlyphs(callback, fn = "forEach") {
-    return Object.values(glyphs)[fn](callback);
-}
-
 function pixelsToUnits(px) {
     const dist = camera.position.z;
     const fov = camera.fov;
@@ -107,47 +104,28 @@ function pixelsToUnits(px) {
     return units;
 }
 
-const scrollVelocity = new THREE.Vector3();
-const _scrollVelocity = new THREE.Vector3();
-let _scrollRot = 0;
 let _scrollPosY = 0;
 let _scrollVelY = 0;
 let __scrollVelY = 0;
-let _scrollDirY = 0;
 
 const mouseMoveVelocity = new THREE.Vector3();
 const _mouseMoveVelocity = new THREE.Vector3();
 
 const gesture = new Gesture(window, {
     onScroll: (state) => {
-        const [x, y] = state.delta;
+        // const [x, y] = state.delta;
         const [_, velY] = state.delta;
         const [__, offsetY] = state.offset;
-        const [___, dirY] = state.direction;
-        const range = 100;
-        _scrollVelocity.set(
-            THREE.MathUtils.mapLinear(x, -range, range, -1, 1),
-            THREE.MathUtils.mapLinear(y, -range, range, -1, 1),
-            0
-        );
+        // const [___, dirY] = state.direction;
 
         _scrollVelY = velY;
         _scrollPosY = offsetY;
-        _scrollDirY = dirY;
+        // _scrollDirY = dirY;
     },
     onMove: (state) => {
         const [dirX, dirY] = state.direction;
-
-        const [x, y] = state.delta;
         const [velX, velY] = state.velocity;
-        const range = 100;
-        _mouseMoveVelocity.set(
-            // THREE.MathUtils.mapLinear(x, -range, range, -1, 1),
-            // THREE.MathUtils.mapLinear(y, -range, range, -1, 1),
-            velX * dirX * -1,
-            velY * dirY * -1,
-            0
-        );
+        mouseMoveVelocity.set(velX * dirX * -1, velY * dirY * -1, 0);
     },
 });
 
@@ -173,37 +151,75 @@ const rootEl = document.querySelector(".three_root");
 renderer.setSize(window.innerWidth, window.innerHeight);
 rootEl.appendChild(renderer.domElement);
 
-// TODO: rewrite to re-use glyph meshes then transform position
-const el = document.querySelector("h1");
-glyphs.a.initialTransform.position.set(
-    pixelsToUnits(window.innerWidth / -2),
-    pixelsToUnits(window.innerHeight / 2)
-);
-glyphs.a.initialTransform.position.x += pixelsToUnits(el.offsetLeft);
-glyphs.a.initialTransform.position.y -= pixelsToUnits(el.offsetTop);
-
 const gltfLoader = new GLTFLoader();
 
-const glyphPromises = traverseGlyphs((glyph) => {
-    return new Promise((resolve, reject) => {
-        gltfLoader.load(
-            glyph.src,
-            (result) => {
-                resolve(result);
-            },
-            null,
-            (err) => {
-                console.log(err);
-                reject(err);
-            }
-        );
-    });
-}, "map");
+const glyphPromises = GLYPH_SRC.map(
+    (glyph, i) =>
+        new Promise((resolve, reject) => {
+            gltfLoader.load(
+                glyph.src,
+                (result) => {
+                    result.name = GLYPH_SRC[i].name;
+                    resolve(result);
+                },
+                null,
+                (err) => {
+                    console.log(err);
+                    reject(err);
+                }
+            );
+        })
+);
+
+function setGlyphPositionBasedOnDOM(glyph) {
+    const el = document.querySelector(glyph.element);
+
+    if (!el) {
+        return console.warn(`No element ${glyph.element}`);
+    }
+
+    let posOffsetX = 0,
+        posOffsetY = 0;
+    const boundingBox = el.getBoundingClientRect();
+
+    if (glyph.elementPositionX === "right") {
+        posOffsetX = pixelsToUnits(boundingBox.width);
+    }
+
+    if (glyph.elementPositionY === "bottom") {
+        posOffsetY = pixelsToUnits(boundingBox.height);
+    }
+
+    glyph.position.set(
+        pixelsToUnits(window.innerWidth / -2),
+        pixelsToUnits(window.innerHeight / 2)
+    );
+
+    const half = pixelsToUnits(boundingBox.width / 2);
+
+    glyph.position.x +=
+        pixelsToUnits(el.offsetLeft) +
+        glyph.elementOffset.x +
+        posOffsetX -
+        half;
+    glyph.position.y -=
+        pixelsToUnits(el.offsetTop) + glyph.elementOffset.y + posOffsetY;
+}
+
+function copyGlyphContainerTransforms(glyph) {
+    // All groups should copy affine transforms from initial position
+    glyph.__initialGroup.position.copy(glyph.position);
+    glyph.__initialGroup.rotation.copy(glyph.rotation);
+
+    glyph.__interactionGroup.position.copy(glyph.position);
+    glyph.__interactionGroup.rotation.copy(glyph.rotation);
+
+    glyph.__animationGroup.position.copy(glyph.position);
+    glyph.__animationGroup.rotation.copy(glyph.rotation);
+}
 
 function animateIn() {
-    traverseGlyphs((glyph) => {
-        //
-    });
+    //
 }
 
 const glyphResults = await Promise.all([
@@ -216,17 +232,19 @@ const glyphResults = await Promise.all([
 });
 
 const envMapTexture = glyphResults.find((r) => r instanceof THREE.Texture);
-glyphResults.forEach((result, i) => {
-    if (result instanceof THREE.Texture) return;
+glyphs.forEach((glyph, i) => {
+    // if (result instanceof THREE.Texture) return;
 
-    const { scene: glyphScene } = result;
-    const glyphData = Object.values(glyphs)[i];
+    const glyphScene = glyphResults
+        .find((r) => r.name === glyph.type)
+        .scene.clone();
 
     const glyphObj = glyphScene.children[0].children[0].children[0];
     glyphObj.geometry.center();
     glyphObj.material.userData = glyphObj.material.uniforms = {
         uFresnelColor: { value: VAN_LOON_FRESNEL.convertLinearToSRGB() },
     };
+
     glyphObj.material.onBeforeCompile = function (shader) {
         shader.vertexShader = shader.vertexShader.replace(
             "#include <common>",
@@ -235,6 +253,7 @@ glyphResults.forEach((result, i) => {
 
             varying vec3 vPositionW;
             varying vec3 vNormalW;
+            varying vec2 vUv;
         `
         );
 
@@ -245,6 +264,7 @@ glyphResults.forEach((result, i) => {
 
             vPositionW = normalize(vec3(modelViewMatrix * vec4(position, 1.0)).xyz);
             vNormalW = normalize(normalMatrix * normal);
+            vUv = uv;
         `
         );
 
@@ -255,8 +275,26 @@ glyphResults.forEach((result, i) => {
 
             varying vec3 vPositionW;
             varying vec3 vNormalW;
+            varying vec2 vUv;
 
             uniform vec3 uFresnelColor;
+
+            float aastep(float threshold, float value) {
+                // float afwidth = length(vec2(dFdx(value), dFdy(value))) * 0.70710678118654757;
+                float afwidth = fwidth(value) * 0.5;
+                return smoothstep(threshold-afwidth, threshold+afwidth, value);
+            }
+
+            float aastep(float threshold, float value, float padding) {
+                return smoothstep(threshold - padding, threshold + padding, value);
+            }
+
+            vec2 aastep(vec2 threshold, vec2 value) {
+                return vec2(
+                    aastep(threshold.x, value.x),
+                    aastep(threshold.y, value.y)
+                );
+            }
         `
         );
 
@@ -265,23 +303,31 @@ glyphResults.forEach((result, i) => {
             /*glsl*/ `
                 #include <dithering_fragment>
                 
-                float fresnelTerm = ( 1.0 - -min(dot(vPositionW, normalize(vNormalW) ), 0.0) );    
-                gl_FragColor += vec4(vec3(0.3, 0.0, .8), 1.) * vec4(fresnelTerm);
-                //gl_FragColor = vec4(1., 0., 0., 1.);
+                float fresnelTerm = (1.0 - -min(dot(vPositionW, normalize(vNormalW) ), 0.0));    
+                vec3 fresnelColor = vec3(0.3, 0.0, .8);
+                // vec3 fresnelColor = vec3(.5);
+                gl_FragColor += vec4(fresnelColor, 1.) * vec4(fresnelTerm);
+
+                float alpha = 1.;
+                float cut = 0.0001;
+                alpha *= aastep(cut, vUv.x);
+                alpha *= 1. - aastep(1. - cut, vUv.x);
+                alpha *= aastep(cut, vUv.x);
+                alpha *= 1. - aastep(1. - cut, vUv.y);
+
+                //gl_FragColor.a = alpha;
         `
         );
     };
 
     glyphObj.material = new THREE.MeshStandardMaterial({
-        // envMap: envMapTexture,
         ...glyphObj.material,
         roughness: 1,
-        metalness: 0.8,
+        metalness: 1,
         color: VAN_LOON_BLUE,
-        //emissive: new THREE.Color("#751aff"),
-        // envMap: envMapTexture,
-        // envMapIntensity: 10,
     });
+
+    setGlyphPositionBasedOnDOM(glyph);
 
     // Used only to apply initial position and later on as initial ref point
     const initialGroup = new THREE.Group();
@@ -290,46 +336,24 @@ glyphResults.forEach((result, i) => {
     // Used for in/out animation
     const animationGroup = new THREE.Group();
 
-    glyphData.__mesh = glyphScene;
+    glyph.__mesh = glyphScene;
 
-    glyphData.__initialGroup = initialGroup;
-    glyphData.__interactionGroup = interactionGroup;
-    glyphData.__animationGroup = animationGroup;
+    glyph.__initialGroup = initialGroup;
+    glyph.__interactionGroup = interactionGroup;
+    glyph.__animationGroup = animationGroup;
 
     // Pos will be handled in loop,
     // if we handle it here we'll get a weird offset from origin
-    glyphScene.scale.setScalar(glyphData.initialTransform.scale);
-    glyphScene.rotation.copy(glyphData.initialTransform.rotation);
+    glyphScene.scale.setScalar(glyph.scale);
+    glyphScene.rotation.copy(glyph.rotation);
 
-    // All groups should copy affine transforms from initial position
-    glyphData.__initialGroup.position.copy(glyphData.initialTransform.position);
-    glyphData.__initialGroup.rotation.copy(glyphData.initialTransform.rotation);
+    copyGlyphContainerTransforms(glyph);
 
-    glyphData.__interactionGroup.position.copy(
-        glyphData.initialTransform.position
-    );
-    glyphData.__interactionGroup.rotation.copy(
-        glyphData.initialTransform.rotation
-    );
-
-    glyphData.__animationGroup.position.copy(
-        glyphData.initialTransform.position
-    );
-    glyphData.__animationGroup.rotation.copy(
-        glyphData.initialTransform.rotation
-    );
-
-    scene.add(glyphData.__interactionGroup);
-    glyphData.__interactionGroup.add(glyphScene);
+    scene.add(glyph.__interactionGroup);
+    glyph.__interactionGroup.add(glyphScene);
 });
 
 const clock = new THREE.Clock();
-
-// const dirLight = new THREE.DirectionalLight(new THREE.Color("#db4dff"), 1);
-// const dirLight = new THREE.DirectionalLight(new THREE.Color("#db4dff"), 1);
-// dirLight.position.set(0, pixelsToUnits(window.innerHeight / -2), 0);
-//scene.add(new THREE.AmbientLight(0xffffff, 0.1));
-// scene.add(dirLight);
 
 function render() {
     window.requestAnimationFrame(render);
@@ -337,9 +361,9 @@ function render() {
 
     const t = clock.getElapsedTime();
 
-    _mouseMoveVelocity.lerp(mouseMoveVelocity, 0.01);
-    _scrollVelocity.lerp(scrollVelocity, 0.001);
-    _scrollRot = THREE.MathUtils.lerp(_scrollRot, _scrollVelocity.y, 0.01);
+    _mouseMoveVelocity.lerp(mouseMoveVelocity, 0.5);
+    //_scrollVelocity.lerp(scrollVelocity, 0.001);
+    //_scrollRot = THREE.MathUtils.lerp(_scrollRot, _scrollVelocity.y, 0.01);
     __scrollVelY = THREE.MathUtils.lerp(__scrollVelY, _scrollVelY, 0.1);
 
     // const nextCameraY = THREE.MathUtils.mapLinear(window.innerHeight);
@@ -348,13 +372,13 @@ function render() {
 
     //camera.position.y -= pixelsToUnits(_scrollVelY);
 
-    traverseGlyphs((glyph, i) => {
+    glyphs.forEach((glyph, i) => {
         // Rotation on mouse move
         const influence = 0.005;
         glyph.__interactionGroup.rotation.x = THREE.MathUtils.lerp(
             glyph.__interactionGroup.rotation.x,
             glyph.__initialGroup.rotation.x -
-                _mouseMoveVelocity.y * glyph.__rand,
+                _mouseMoveVelocity.y * (glyph.__rand * 0.4),
             influence + glyph.__rand * i * influence
         );
         glyph.__interactionGroup.rotation.y = THREE.MathUtils.lerp(
@@ -363,11 +387,6 @@ function render() {
                 _mouseMoveVelocity.x * glyph.__rand,
             influence + glyph.__rand * i * influence
         );
-
-        // Rotation on scroll
-
-        // glyph.__interactionGroup.rotation.x +=
-        //     __scrollVelY * _scrollDirY * -1 * 0.004;
 
         let idleT = Math.sin(t * 0.5 + i * 10);
         // Normalize -1 - 1 to 0 - 1
@@ -383,6 +402,11 @@ render();
 window.addEventListener("resize", onWindowResize, false);
 
 function onWindowResize() {
+    glyphs.forEach((glyph) => {
+        setGlyphPositionBasedOnDOM(glyph);
+        copyGlyphContainerTransforms(glyph);
+    });
+
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 
