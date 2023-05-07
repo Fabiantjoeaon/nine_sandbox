@@ -33,7 +33,7 @@ const glyphs = [
     {
         type: "A",
 
-        element: IS_DEBUG ? "h1" : "",
+        element: IS_DEBUG ? "h1" : ".homepage-3d-afbeelding",
         elementOffset: new THREE.Vector3(),
         elementPositionX: "left",
         elementPositionY: "top",
@@ -44,7 +44,7 @@ const glyphs = [
     {
         type: "O",
 
-        element: IS_DEBUG ? "h2" : "",
+        element: IS_DEBUG ? "h2" : ".uui-layout13_image-wrapper-slide-1",
         elementOffset: new THREE.Vector3(),
         elementPositionX: "left",
         elementPositionY: "top",
@@ -55,7 +55,7 @@ const glyphs = [
     {
         type: "N",
 
-        element: IS_DEBUG ? "h3" : "",
+        element: IS_DEBUG ? "h3" : ".h2-blauw",
         elementOffset: new THREE.Vector3(),
         elementPositionX: "right",
         elementPositionY: "bottom",
