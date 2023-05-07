@@ -403,7 +403,7 @@ function render() {
 
     glyphs.forEach((glyph, i) => {
         // Rotation on mouse move
-        const influence = 0.005;
+        const influence = 0.001;
         glyph.__interactionGroup.rotation.x = THREE.MathUtils.lerp(
             glyph.__interactionGroup.rotation.x,
             glyph.__initialGroup.rotation.x -
