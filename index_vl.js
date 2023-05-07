@@ -33,7 +33,7 @@ const glyphs = [
     {
         type: "A",
 
-        element: "h1",
+        element: IS_DEBUG ? "h1" : "",
         elementOffset: new THREE.Vector3(),
         elementPositionX: "left",
         elementPositionY: "top",
@@ -44,7 +44,7 @@ const glyphs = [
     {
         type: "O",
 
-        element: "h2",
+        element: IS_DEBUG ? "h2" : "",
         elementOffset: new THREE.Vector3(),
         elementPositionX: "left",
         elementPositionY: "top",
@@ -55,7 +55,7 @@ const glyphs = [
     {
         type: "N",
 
-        element: "h3",
+        element: IS_DEBUG ? "h3" : "",
         elementOffset: new THREE.Vector3(),
         elementPositionX: "right",
         elementPositionY: "bottom",
@@ -74,9 +74,10 @@ const glyphs = [
 
 const ENV_MAP_PATH =
     "https://uploads-ssl.webflow.com/603379589922195849a7718c/644ed7aeae089038fc622679_envmap.jpg";
-const VAN_LOON_BLUE = new THREE.Color("rgb(0,50,255)");
-// const VAN_LOON_FRESNEL = new THREE.Color("rgb(50,50,200)");
-const VAN_LOON_FRESNEL = new THREE.Color("rgb(255,255,255)");
+const VAN_LOON_BLUE_COLOR = new THREE.Color("rgb(0,50,255)");
+const VAN_LOON_BLUE_EMISSIVE = new THREE.Color("rgb(0,0,100)");
+const VAN_LOON_FRESNEL = new THREE.Color("rgb(10,0,200)");
+// const VAN_LOON_FRESNEL = new THREE.Color("rgb(255,255,255)");
 
 window.onbeforeunload = function () {
     window.scrollTo(0, 0);
@@ -214,12 +215,31 @@ function copyGlyphContainerTransforms(glyph) {
     glyph.__interactionGroup.position.copy(glyph.position);
     glyph.__interactionGroup.rotation.copy(glyph.rotation);
 
-    glyph.__animationGroup.position.copy(glyph.position);
-    glyph.__animationGroup.rotation.copy(glyph.rotation);
+    // glyph.__animationGroup.position.copy(glyph.position);
+    // glyph.__animationGroup.rotation.copy(glyph.rotation);
 }
 
 function animateIn() {
-    //
+    glyphs.forEach((glyph, i) => {
+        const _obj = { value: 0 };
+
+        gsap.to(_obj, {
+            value: 1,
+            duration: 2,
+            ease: Quint.easeOut,
+            delay: i,
+            onUpdate: () => {
+                glyph.__animationGroup.scale.setScalar(_obj.value);
+                glyph.__animationGroup.rotation.y = THREE.MathUtils.mapLinear(
+                    _obj.value,
+                    0,
+                    1,
+                    Math.PI * 2,
+                    0
+                );
+            },
+        });
+    });
 }
 
 const glyphResults = await Promise.all([
@@ -233,19 +253,21 @@ const glyphResults = await Promise.all([
 
 const envMapTexture = glyphResults.find((r) => r instanceof THREE.Texture);
 glyphs.forEach((glyph, i) => {
-    // if (result instanceof THREE.Texture) return;
-
     const glyphScene = glyphResults
         .find((r) => r.name === glyph.type)
         .scene.clone();
 
     const glyphObj = glyphScene.children[0].children[0].children[0];
     glyphObj.geometry.center();
-    glyphObj.material.userData = glyphObj.material.uniforms = {
+    glyphObj.material.userData = {
         uFresnelColor: { value: VAN_LOON_FRESNEL.convertLinearToSRGB() },
     };
 
     glyphObj.material.onBeforeCompile = function (shader) {
+        Object.keys(glyphObj.material.userData).forEach((uName) => {
+            shader.uniforms[uName] = glyphObj.material.userData[uName];
+        });
+
         shader.vertexShader = shader.vertexShader.replace(
             "#include <common>",
             /*glsl*/ `
@@ -303,28 +325,32 @@ glyphs.forEach((glyph, i) => {
             /*glsl*/ `
                 #include <dithering_fragment>
                 
+                float fresnelIntensity = .5;
                 float fresnelTerm = (1.0 - -min(dot(vPositionW, normalize(vNormalW) ), 0.0));    
-                vec3 fresnelColor = vec3(0.3, 0.0, .8);
-                // vec3 fresnelColor = vec3(.5);
-                gl_FragColor += vec4(fresnelColor, 1.) * vec4(fresnelTerm);
+                vec3 fresnelColor = uFresnelColor;
+                
+                gl_FragColor = mix(gl_FragColor, gl_FragColor + vec4(fresnelColor, 1.) * vec4(fresnelTerm), fresnelIntensity);
 
-                float alpha = 1.;
-                float cut = 0.0001;
-                alpha *= aastep(cut, vUv.x);
-                alpha *= 1. - aastep(1. - cut, vUv.x);
-                alpha *= aastep(cut, vUv.x);
-                alpha *= 1. - aastep(1. - cut, vUv.y);
+                // float alpha = 1.;
+                // float cut = 0.0001;
+                // alpha *= aastep(cut, vUv.x);
+                // alpha *= 1. - aastep(1. - cut, vUv.x);
+                // alpha *= aastep(cut, vUv.x);
+                // alpha *= 1. - aastep(1. - cut, vUv.y);
 
-                //gl_FragColor.a = alpha;
+                // gl_FragColor.a = alpha;
         `
         );
     };
 
     glyphObj.material = new THREE.MeshStandardMaterial({
         ...glyphObj.material,
+        envMap: envMapTexture,
+        envMapIntensity: 1,
         roughness: 1,
         metalness: 1,
-        color: VAN_LOON_BLUE,
+        color: VAN_LOON_BLUE_COLOR,
+        emissive: VAN_LOON_BLUE_EMISSIVE,
     });
 
     setGlyphPositionBasedOnDOM(glyph);
@@ -347,10 +373,13 @@ glyphs.forEach((glyph, i) => {
     glyphScene.scale.setScalar(glyph.scale);
     glyphScene.rotation.copy(glyph.rotation);
 
+    glyph.__animationGroup.scale.setScalar(0);
+
     copyGlyphContainerTransforms(glyph);
 
+    glyph.__animationGroup.add(glyphScene);
+    glyph.__interactionGroup.add(glyph.__animationGroup);
     scene.add(glyph.__interactionGroup);
-    glyph.__interactionGroup.add(glyphScene);
 });
 
 const clock = new THREE.Clock();
