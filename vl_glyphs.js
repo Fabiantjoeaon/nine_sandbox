@@ -309,10 +309,8 @@ function setGlyphPositionBasedOnDOM(glyph) {
     const half = pixelsToUnits(boundingBox.width / 2);
 
     glyph.position.x +=
-        pixelsToUnits(el.offsetLeft) +
-        glyph.elementOffset.x +
-        posOffsetX -
-        half;
+        pixelsToUnits(el.offsetLeft) + glyph.elementOffset.x + posOffsetX;
+
     glyph.position.y -=
         pixelsToUnits(el.offsetTop) + glyph.elementOffset.y + posOffsetY;
 }
