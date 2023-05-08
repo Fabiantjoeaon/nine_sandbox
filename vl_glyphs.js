@@ -33,35 +33,143 @@ const glyphs = [
     {
         type: "A",
 
-        element: IS_DEBUG ? "h1" : ".homepage-3d-afbeelding",
-        elementOffset: new THREE.Vector3(),
+        element: IS_DEBUG ? "h1" : ".GLYPH-A-1",
+        elementOffset: new THREE.Vector3(0, 1, 0),
         elementPositionX: "left",
         elementPositionY: "top",
 
         rotation: new THREE.Euler(-0.1, Math.PI - GLYPH_FROM_ROTATION, 0.4),
-        scale: 0.7,
+        scale: 0.5,
     },
     {
         type: "O",
 
-        element: IS_DEBUG ? "h2" : ".uui-layout13_image-wrapper-slide-1",
-        elementOffset: new THREE.Vector3(),
-        elementPositionX: "left",
-        elementPositionY: "top",
-
-        rotation: new THREE.Euler(),
-        scale: 0.6,
-    },
-    {
-        type: "N",
-
-        element: IS_DEBUG ? "h3" : ".h2-blauw",
-        elementOffset: new THREE.Vector3(),
+        element: IS_DEBUG ? "h2" : ".GLYPH-O-1",
+        elementOffset: new THREE.Vector3(0.2, -0.4, 0),
         elementPositionX: "right",
         elementPositionY: "bottom",
 
         rotation: new THREE.Euler(),
-        scale: 0.7,
+        scale: 0.5,
+    },
+    {
+        type: "L",
+
+        element: IS_DEBUG ? "h3" : ".GLYPH-L-1",
+        elementOffset: new THREE.Vector3(0.3, -0.4, 0),
+        elementPositionX: "top",
+        elementPositionY: "left",
+
+        rotation: new THREE.Euler(0.2, 0.3, 0),
+        scale: 0.6,
+    },
+
+    {
+        type: "A",
+
+        element: IS_DEBUG ? "h3" : ".GLYPH-A-2",
+        elementOffset: new THREE.Vector3(0.3, -0.4, 0),
+        elementPositionX: "top",
+        elementPositionY: "right",
+
+        rotation: new THREE.Euler(-0.1, Math.PI - GLYPH_FROM_ROTATION, 0.4),
+        scale: 0.4,
+    },
+
+    {
+        type: "O",
+
+        element: IS_DEBUG ? "h3" : ".GLYPH-O-2",
+        elementOffset: new THREE.Vector3(0.3, -0.4, 0),
+        elementPositionX: "bottom",
+        elementPositionY: "left",
+
+        rotation: new THREE.Euler(-0.1, Math.PI - GLYPH_FROM_ROTATION, 0.4),
+        scale: 0.4,
+    },
+
+    {
+        type: "N",
+
+        element: IS_DEBUG ? "h3" : ".GLYPH-N-1",
+        elementOffset: new THREE.Vector3(-1, -0.2, 0),
+        elementPositionX: "top",
+        elementPositionY: "right",
+
+        rotation: new THREE.Euler(-0.1, Math.PI - GLYPH_FROM_ROTATION, 0.4),
+        scale: 0.5,
+    },
+
+    {
+        type: "L",
+
+        element: IS_DEBUG ? "h3" : ".GLYPH-L-2",
+        elementOffset: new THREE.Vector3(0.3, 0, 0),
+        elementPositionX: "top",
+        elementPositionY: "left",
+
+        rotation: new THREE.Euler(-0.2, Math.PI + GLYPH_FROM_ROTATION, 0.4),
+        scale: 0.5,
+    },
+
+    {
+        type: "A",
+
+        element: IS_DEBUG ? "h3" : ".GLYPH-A-3",
+        elementOffset: new THREE.Vector3(0.5, -0.1, 0),
+        elementPositionX: "top",
+        elementPositionY: "right",
+
+        rotation: new THREE.Euler(-0.2, Math.PI, 1),
+        scale: 0.5,
+    },
+
+    {
+        type: "O",
+
+        element: IS_DEBUG ? "h3" : ".GLYPH-O-3",
+        elementOffset: new THREE.Vector3(0, 0.1, 0),
+        elementPositionX: "top",
+        elementPositionY: "right",
+
+        rotation: new THREE.Euler(0.2, -Math.PI, 1),
+        scale: 0.5,
+    },
+
+    {
+        type: "O",
+
+        element: IS_DEBUG ? "h3" : ".GLYPH-O-4",
+        elementOffset: new THREE.Vector3(0, 0.1, 0),
+        elementPositionX: "top",
+        elementPositionY: "left",
+
+        rotation: new THREE.Euler(0.2, -Math.PI, 1),
+        scale: 0.5,
+    },
+
+    {
+        type: "O",
+
+        element: IS_DEBUG ? "h3" : ".GLYPH-O-5",
+        elementOffset: new THREE.Vector3(0.5, 0.5, 0),
+        elementPositionX: "top",
+        elementPositionY: "right",
+
+        rotation: new THREE.Euler(0.2, -Math.PI, 1),
+        scale: 0.5,
+    },
+
+    {
+        type: "A",
+
+        element: IS_DEBUG ? "h3" : ".GLYPH-A-4",
+        elementOffset: new THREE.Vector3(-0.5, -0.5, 0),
+        elementPositionX: "bottom",
+        elementPositionY: "left",
+
+        rotation: new THREE.Euler(0.2, -Math.PI, 1),
+        scale: 0.5,
     },
 ].map((g) => ({
     ...g,
