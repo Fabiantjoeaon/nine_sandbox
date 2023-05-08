@@ -80,7 +80,7 @@ async function main() {
             type: "A",
 
             element: IS_DEBUG ? "h3" : ".GLYPH-A-2",
-            elementOffset: new THREE.Vector3(1.3, 0, 0),
+            elementOffset: new THREE.Vector3(6, 0.5, 0),
             elementPositionX: "top",
             elementPositionY: "right",
 
@@ -101,34 +101,36 @@ async function main() {
         },
 
         {
+            // OK
             type: "N",
 
             element: IS_DEBUG ? "h3" : ".GLYPH-N-1",
-            elementOffset: new THREE.Vector3(-1, -0.2, 0),
+            elementOffset: new THREE.Vector3(1, -0.2, 0),
             elementPositionX: "top",
             elementPositionY: "right",
 
             rotation: new THREE.Euler(-0.1, Math.PI - GLYPH_FROM_ROTATION, 0.4),
-            scale: 0.5,
+            scale: 0.4,
         },
 
+        // {
+        //     type: "L",
+
+        //     element: IS_DEBUG ? "h3" : ".GLYPH-L-2",
+        //     elementOffset: new THREE.Vector3(0.3, 0, 0),
+        //     elementPositionX: "top",
+        //     elementPositionY: "left",
+
+        //     rotation: new THREE.Euler(-0.2, Math.PI + GLYPH_FROM_ROTATION, 0.4),
+        //     scale: 0.5,
+        // },
+
         {
-            type: "L",
-
-            element: IS_DEBUG ? "h3" : ".GLYPH-L-2",
-            elementOffset: new THREE.Vector3(0.3, 0, 0),
-            elementPositionX: "top",
-            elementPositionY: "left",
-
-            rotation: new THREE.Euler(-0.2, Math.PI + GLYPH_FROM_ROTATION, 0.4),
-            scale: 0.5,
-        },
-
-        {
+            // OK
             type: "A",
 
             element: IS_DEBUG ? "h3" : ".GLYPH-A-3",
-            elementOffset: new THREE.Vector3(0.5, -0.1, 0),
+            elementOffset: new THREE.Vector3(1.2, -0.1, 0),
             elementPositionX: "top",
             elementPositionY: "right",
 
@@ -164,7 +166,7 @@ async function main() {
             type: "O",
 
             element: IS_DEBUG ? "h3" : ".GLYPH-O-5",
-            elementOffset: new THREE.Vector3(2.5, 0.5, 0),
+            elementOffset: new THREE.Vector3(4.5, 1.5, 0),
             elementPositionX: "top",
             elementPositionY: "right",
 
@@ -176,7 +178,7 @@ async function main() {
             type: "A",
 
             element: IS_DEBUG ? "h3" : ".GLYPH-A-4",
-            elementOffset: new THREE.Vector3(0.5, -0.5, 0),
+            elementOffset: new THREE.Vector3(-0.5, 1.5, 0),
             elementPositionX: "bottom",
             elementPositionY: "left",
 
