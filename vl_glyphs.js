@@ -44,7 +44,7 @@ async function main() {
             type: "A",
 
             element: IS_DEBUG ? "h1" : ".GLYPH-A-1",
-            elementOffset: new THREE.Vector3(0.3, 0.5, 0),
+            elementOffset: new THREE.Vector3(2.3, 0.5, 0),
             elementPositionX: "left",
             elementPositionY: "top",
 
@@ -88,17 +88,17 @@ async function main() {
             //scale: 0.4,
         },
 
-        {
-            type: "O",
+        // {
+        //     type: "O",
 
-            element: IS_DEBUG ? "h3" : ".GLYPH-O-2",
-            elementOffset: new THREE.Vector3(0.6, -0.4, 0),
-            elementPositionX: "bottom",
-            elementPositionY: "left",
+        //     element: IS_DEBUG ? "h3" : ".GLYPH-O-2",
+        //     elementOffset: new THREE.Vector3(0.6, -0.4, 0),
+        //     elementPositionX: "bottom",
+        //     elementPositionY: "left",
 
-            rotation: new THREE.Euler(-0.1, Math.PI - GLYPH_FROM_ROTATION, 0.4),
-            //scale: 0.4,
-        },
+        //     rotation: new THREE.Euler(-0.1, Math.PI - GLYPH_FROM_ROTATION, 0.4),
+        //     //scale: 0.4,
+        // },
 
         {
             // OK
@@ -130,7 +130,7 @@ async function main() {
             type: "A",
 
             element: IS_DEBUG ? "h3" : ".GLYPH-A-3",
-            elementOffset: new THREE.Vector3(1.2, -0.1, 0),
+            elementOffset: new THREE.Vector3(1.9, -0.1, 0),
             elementPositionX: "top",
             elementPositionY: "right",
 
@@ -199,10 +199,9 @@ async function main() {
 
     const ENV_MAP_PATH =
         "https://uploads-ssl.webflow.com/603379589922195849a7718c/644ed7aeae089038fc622679_envmap.jpg";
-    const VAN_LOON_BLUE_COLOR = new THREE.Color("rgb(0,0,255)");
+    const VAN_LOON_BLUE_COLOR = new THREE.Color("rgb(0,0,105)");
     const VAN_LOON_BLUE_EMISSIVE = new THREE.Color("rgb(0,0,100)");
-    const VAN_LOON_FRESNEL = new THREE.Color("rgb(2,10,160)");
-    // const VAN_LOON_FRESNEL = new THREE.Color("rgb(255,255,255)");
+    const VAN_LOON_FRESNEL = new THREE.Color("rgb(2,10,100)");
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
@@ -455,7 +454,7 @@ async function main() {
                 /*glsl*/ `
                 #include <dithering_fragment>
                 
-                float fresnelIntensity = .5;
+                float fresnelIntensity = .3;
                 float fresnelTerm = (1.0 - -min(dot(vPositionW, normalize(vNormalW) ), 0.0));    
                 vec3 fresnelColor = uFresnelColor;
                 
@@ -560,7 +559,7 @@ async function main() {
             idleT = idleT;
             glyph.__interactionGroup.position.y =
                 glyph.__initialGroup.position.y + idleT;
-            glyph.__interactionGroup.rotation.z += idleT * 0.001;
+            glyph.__interactionGroup.rotation.z += idleT * 0.01;
         });
     }
 
