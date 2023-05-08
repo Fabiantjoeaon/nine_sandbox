@@ -178,6 +178,8 @@ const glyphs = [
     __interactionGroup: null,
     __rand: Math.random(),
     __objIn: { value: 0 },
+    // Webflow converts classes to lowercase
+    element: g.element.toLowerCase(),
 }));
 
 const ENV_MAP_PATH =
