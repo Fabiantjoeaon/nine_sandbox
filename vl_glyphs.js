@@ -18,23 +18,23 @@ async function main() {
     const GLYPH_SRC = [
         {
             name: "A",
-            src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/644eda97b6958181ae521001_a_glyph_van_loon_WF.gltf.txt",
+            src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/64594108c63b66596e225d15_a_glyph_van_loon.gltf.txt",
         },
         {
             name: "O",
-            src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/644eda97ac066513ce630f14_o_glyph_van_loon_WF.gltf.txt",
+            src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/64594108626c3017a92bfeaf_o_glyph_van_loon.gltf.txt",
         },
         {
             name: "N",
-            src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/644eda970014987c0babbbba_n_glyph_van_loon_WF.gltf.txt",
+            src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/645941081911cd17ae54d71f_n_glyph_van_loon.gltf.txt",
         },
         {
             name: "L",
-            src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/644eda97442c994d73c035fe_l_glyph_van_loon_WF.gltf.txt",
+            src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/645941088474694b20fbd33d_l_glyph_van_loon.gltf.txt",
         },
         {
             name: "V",
-            src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/644eda97228bee398ef568d3_v_glyph_van_loon_WF.gltf.txt",
+            src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/6459410800413fdec23ab65c_v_glyph_van_loon.gltf.txt",
         },
     ];
 
@@ -49,43 +49,43 @@ async function main() {
             elementPositionY: "top",
 
             rotation: new THREE.Euler(-0.1, Math.PI - GLYPH_FROM_ROTATION, 0.4),
-            scale: 0.5,
+            //scale: 0.5,
         },
         {
             // OK
             type: "O",
 
             element: IS_DEBUG ? "h2" : ".GLYPH-O-1",
-            elementOffset: new THREE.Vector3(1.2, -0.9, 0),
+            elementOffset: new THREE.Vector3(1.3, -1.2, 0),
             elementPositionX: "right",
             elementPositionY: "bottom",
 
             rotation: new THREE.Euler(0.3, 0.1),
-            scale: 0.5,
+            //scale: 0.5,
         },
         {
             // OK
             type: "L",
 
             element: IS_DEBUG ? "h3" : ".GLYPH-L-1",
-            elementOffset: new THREE.Vector3(1, -0.4, 0),
+            elementOffset: new THREE.Vector3(1.6, -0.4, 0),
             elementPositionX: "top",
             elementPositionY: "left",
 
             rotation: new THREE.Euler(0.8, 0.3, 0),
-            scale: 0.6,
+            //scale: 0.6,
         },
 
         {
             type: "A",
 
             element: IS_DEBUG ? "h3" : ".GLYPH-A-2",
-            elementOffset: new THREE.Vector3(6, 0.5, 0),
+            elementOffset: new THREE.Vector3(7.2, 1.5, 0),
             elementPositionX: "top",
             elementPositionY: "right",
 
             rotation: new THREE.Euler(0.7, Math.PI + GLYPH_FROM_ROTATION, 0.4),
-            scale: 0.4,
+            //scale: 0.4,
         },
 
         {
@@ -97,7 +97,7 @@ async function main() {
             elementPositionY: "left",
 
             rotation: new THREE.Euler(-0.1, Math.PI - GLYPH_FROM_ROTATION, 0.4),
-            scale: 0.4,
+            //scale: 0.4,
         },
 
         {
@@ -110,7 +110,7 @@ async function main() {
             elementPositionY: "right",
 
             rotation: new THREE.Euler(-0.1, Math.PI - GLYPH_FROM_ROTATION, 0.4),
-            scale: 0.4,
+            //scale: 0.4,
         },
 
         // {
@@ -122,7 +122,7 @@ async function main() {
         //     elementPositionY: "left",
 
         //     rotation: new THREE.Euler(-0.2, Math.PI + GLYPH_FROM_ROTATION, 0.4),
-        //     scale: 0.5,
+        ////     scale: 0.5,
         // },
 
         {
@@ -135,7 +135,7 @@ async function main() {
             elementPositionY: "right",
 
             rotation: new THREE.Euler(-0.2, Math.PI, 1),
-            scale: 0.5,
+            //scale: 0.5,
         },
 
         {
@@ -147,7 +147,7 @@ async function main() {
             elementPositionY: "right",
 
             rotation: new THREE.Euler(0.2, -Math.PI, 1),
-            scale: 0.5,
+            //scale: 0.5,
         },
 
         {
@@ -159,31 +159,32 @@ async function main() {
             elementPositionY: "left",
 
             rotation: new THREE.Euler(0.2, -Math.PI, 1),
-            scale: 0.5,
+            //scale: 0.5,
         },
 
         {
             type: "O",
 
             element: IS_DEBUG ? "h3" : ".GLYPH-O-5",
-            elementOffset: new THREE.Vector3(4.5, 1.5, 0),
+            elementOffset: new THREE.Vector3(5, 2, 0),
             elementPositionX: "top",
             elementPositionY: "right",
 
             rotation: new THREE.Euler(0.2, -Math.PI, 1),
-            scale: 0.5,
+            //scale: 0.5,
         },
 
         {
+            // OK
             type: "A",
 
             element: IS_DEBUG ? "h3" : ".GLYPH-A-4",
-            elementOffset: new THREE.Vector3(-0.5, 1.5, 0),
+            elementOffset: new THREE.Vector3(-1.5, 1.1, 0),
             elementPositionX: "bottom",
             elementPositionY: "left",
 
             rotation: new THREE.Euler(0.2, -Math.PI, 1),
-            scale: 0.5,
+            //scale: 0.5,
         },
     ].map((g) => ({
         ...g,
@@ -198,9 +199,9 @@ async function main() {
 
     const ENV_MAP_PATH =
         "https://uploads-ssl.webflow.com/603379589922195849a7718c/644ed7aeae089038fc622679_envmap.jpg";
-    const VAN_LOON_BLUE_COLOR = new THREE.Color("rgb(0,50,255)");
+    const VAN_LOON_BLUE_COLOR = new THREE.Color("rgb(0,0,255)");
     const VAN_LOON_BLUE_EMISSIVE = new THREE.Color("rgb(0,0,100)");
-    const VAN_LOON_FRESNEL = new THREE.Color("rgb(10,0,200)");
+    const VAN_LOON_FRESNEL = new THREE.Color("rgb(2,10,160)");
     // const VAN_LOON_FRESNEL = new THREE.Color("rgb(255,255,255)");
 
     const scene = new THREE.Scene();
@@ -469,7 +470,7 @@ async function main() {
             envMap: envMapTexture,
             envMapIntensity: 1,
             roughness: 1,
-            metalness: 1,
+            metalness: 0,
             color: VAN_LOON_BLUE_COLOR,
             emissive: VAN_LOON_BLUE_EMISSIVE,
         });
@@ -491,7 +492,7 @@ async function main() {
 
         // Pos will be handled in loop,
         // if we handle it here we'll get a weird offset from origin
-        glyphScene.scale.setScalar(glyph.scale);
+        glyphScene.scale.setScalar(0.6);
         glyphScene.rotation.copy(glyph.rotation);
 
         glyph.__animationGroup.scale.setScalar(0);
@@ -526,9 +527,9 @@ async function main() {
         glyphs.forEach((glyph, i) => {
             // Rotation on mouse move
             const influence = 0.001;
-            glyph.__interactionGroup.rotation.x = THREE.MathUtils.lerp(
-                glyph.__interactionGroup.rotation.x,
-                glyph.__initialGroup.rotation.x -
+            glyph.__interactionGroup.rotation.z = THREE.MathUtils.lerp(
+                glyph.__interactionGroup.rotation.z,
+                glyph.__initialGroup.rotation.z -
                     _mouseMoveVelocity.y * (glyph.__rand * 0.4),
                 influence + glyph.__rand * i * influence
             );
@@ -538,13 +539,20 @@ async function main() {
                     _mouseMoveVelocity.x * glyph.__rand,
                 influence + glyph.__rand * i * influence
             );
+            // glyph.__interactionGroup.rotation.x = THREE.MathUtils.lerp(
+            //     glyph.__interactionGroup.rotation.x,
+            //     glyph.__initialGroup.rotation.x - _scrollVelY * 0.1,
+            //     0.01
+            // );
+            //glyph.__interactionGroup.rotation.x += __scrollVelY * 0.001;
 
-            let idleT = Math.sin(t * 0.5 + i * 10);
+            let idleT = Math.sin(t * 0.5 + i * 20);
             // Normalize -1 - 1 to 0 - 1
             idleT = (idleT + 1) * 0.5;
             idleT = idleT;
             glyph.__interactionGroup.position.y =
                 glyph.__initialGroup.position.y + idleT;
+            glyph.__interactionGroup.rotation.z += idleT * 0.001;
         });
     }
 
