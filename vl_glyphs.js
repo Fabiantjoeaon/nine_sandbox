@@ -34,7 +34,7 @@ const glyphs = [
         type: "A",
 
         element: IS_DEBUG ? "h1" : ".GLYPH-A-1",
-        elementOffset: new THREE.Vector3(0, 1, 0),
+        elementOffset: new THREE.Vector3(0.3, 0, 0),
         elementPositionX: "left",
         elementPositionY: "top",
 
@@ -45,22 +45,22 @@ const glyphs = [
         type: "O",
 
         element: IS_DEBUG ? "h2" : ".GLYPH-O-1",
-        elementOffset: new THREE.Vector3(0.2, -0.4, 0),
+        elementOffset: new THREE.Vector3(1.2, -0.9, 0),
         elementPositionX: "right",
         elementPositionY: "bottom",
 
-        rotation: new THREE.Euler(),
+        rotation: new THREE.Euler(0.3, 0.1),
         scale: 0.5,
     },
     {
         type: "L",
 
         element: IS_DEBUG ? "h3" : ".GLYPH-L-1",
-        elementOffset: new THREE.Vector3(0.3, -0.4, 0),
+        elementOffset: new THREE.Vector3(1, -0.4, 0),
         elementPositionX: "top",
         elementPositionY: "left",
 
-        rotation: new THREE.Euler(0.2, 0.3, 0),
+        rotation: new THREE.Euler(0.8, 0.3, 0),
         scale: 0.6,
     },
 
@@ -68,11 +68,11 @@ const glyphs = [
         type: "A",
 
         element: IS_DEBUG ? "h3" : ".GLYPH-A-2",
-        elementOffset: new THREE.Vector3(0.3, -0.4, 0),
+        elementOffset: new THREE.Vector3(1.3, 0, 0),
         elementPositionX: "top",
         elementPositionY: "right",
 
-        rotation: new THREE.Euler(-0.1, Math.PI - GLYPH_FROM_ROTATION, 0.4),
+        rotation: new THREE.Euler(0.7, Math.PI + GLYPH_FROM_ROTATION, 0.4),
         scale: 0.4,
     },
 
@@ -80,7 +80,7 @@ const glyphs = [
         type: "O",
 
         element: IS_DEBUG ? "h3" : ".GLYPH-O-2",
-        elementOffset: new THREE.Vector3(0.3, -0.4, 0),
+        elementOffset: new THREE.Vector3(0.6, -0.4, 0),
         elementPositionX: "bottom",
         elementPositionY: "left",
 
@@ -152,7 +152,7 @@ const glyphs = [
         type: "O",
 
         element: IS_DEBUG ? "h3" : ".GLYPH-O-5",
-        elementOffset: new THREE.Vector3(0.5, 0.5, 0),
+        elementOffset: new THREE.Vector3(2.5, 0.5, 0),
         elementPositionX: "top",
         elementPositionY: "right",
 
@@ -164,7 +164,7 @@ const glyphs = [
         type: "A",
 
         element: IS_DEBUG ? "h3" : ".GLYPH-A-4",
-        elementOffset: new THREE.Vector3(-0.5, -0.5, 0),
+        elementOffset: new THREE.Vector3(0.5, -0.5, 0),
         elementPositionX: "bottom",
         elementPositionY: "left",
 
@@ -337,7 +337,7 @@ function animateIn() {
             value: 1,
             duration: 2,
             ease: Quint.easeOut,
-            delay: i,
+            delay: i * 0.5,
             onUpdate: () => {
                 glyph.__animationGroup.scale.setScalar(_obj.value);
                 glyph.__animationGroup.rotation.y = THREE.MathUtils.mapLinear(
@@ -507,7 +507,8 @@ function render() {
 
     // const nextCameraY = THREE.MathUtils.mapLinear(window.innerHeight);
     const nextY = pixelsToUnits(_scrollPosY) * -1;
-    camera.position.y = THREE.MathUtils.lerp(camera.position.y, nextY, 0.5);
+    // camera.position.y = THREE.MathUtils.lerp(camera.position.y, nextY, 0.5);
+    camera.position.y = nextY;
 
     //camera.position.y -= pixelsToUnits(_scrollVelY);
 
