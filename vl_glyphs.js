@@ -306,6 +306,14 @@ async function main() {
             posOffsetY = 0;
         const boundingBox = el.getBoundingClientRect();
 
+        if (!boundingBox.width || !boundingBox.height) {
+            glyph.visible = false;
+            console.warn(
+                `${glyph.element} has no bounding box information, the object has been removed from the scene`
+            );
+            return;
+        }
+
         if (glyph.elementPositionX === "right") {
             posOffsetX = pixelsToUnits(boundingBox.width);
         }
