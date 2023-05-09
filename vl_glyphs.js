@@ -375,9 +375,9 @@ async function main() {
         ...glyphPromises,
         envMapPromise,
     ]).finally(() => {
-        setTimeout(() => {
-            animateIn();
-        }, 1000);
+        // setTimeout(() => {
+        animateIn();
+        // }, 1000);
     });
 
     const envMapTexture = glyphResults.find((r) => r instanceof THREE.Texture);
