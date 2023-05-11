@@ -1,146 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
 
-        <style>
-            * {
-                box-sizing: border-box;
-            }
+    <style>
+      * {
+        box-sizing: border-box;
+      }
 
-            :where(:root) {
-                display: grid;
-                height: 100%;
-            }
+      :where(:root) {
+        display: grid;
+        height: 100%;
+      }
 
-            html,
-            body {
-                margin: 0;
-                padding: 0;
-            }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
 
-            #root {
-                position: fixed;
-                top: 0;
-                left: 0;
-                z-index: 0;
-            }
+      #root {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 0;
+      }
 
-            .inner {
-                padding-top: 300px;
+      .inner {
+        padding-top: 300px;
 
-                height: 450vh;
-                z-index: 1;
-                background-color: rgba(50, 50, 50, 1);
-                color: #fff;
-                position: absolute;
-                top: 0;
-                left: 0;
+        height: 450vh;
+        z-index: 1;
+        background-color: #fff;
+        color: #fff;
+        position: absolute;
+        width: 100dvw;
+        top: 0;
+        left: 0;
 
-                touch-action: pan-x;
-            }
+        touch-action: pan-x;
+        overflow: hidden;
+      }
 
-            .inner * {
-                user-select: none;
-            }
+      .inner * {
+        user-select: none;
+      }
 
-            .three_root {
-                position: fixed;
-                width: 100dwv;
-                height: 100dvh;
-                z-index: 99;
-            }
+      .three_root {
+        position: fixed;
+        width: 100dwv;
+        height: 100dvh;
+        z-index: 99;
+      }
 
-            .inner h1,
-            .inner h2,
-            .inner h3,
-            .inner h4 {
-                position: absolute;
-                font-family: sans-serif;
-                font-size: 4rem;
-                left: 50%;
-                perspective: 4000px;
-                transform: translate(-50%);
-                color: #fff;
-                text-align: center;
+      .inner h1,
+      .inner h2,
+      .inner h3,
+      .inner h4 {
+        position: absolute;
+        font-family: sans-serif;
+        font-size: 4rem;
+        left: 50%;
+        perspective: 4000px;
+        transform: translate(-50%);
+        color: #fff;
+        text-align: center;
 
-                padding: 100px 200px;
-                border-radius: 15px;
-            }
+        padding: 100px 200px;
+        border-radius: 15px;
+      }
 
-            h1 {
-                top: 40vh;
-            }
+      h1 {
+        top: 40vh;
+      }
 
-            h2 {
-                top: 150vh;
-            }
+      h2 {
+        top: 150vh;
+      }
 
-            h3 {
-                top: 250vh;
-            }
+      h3 {
+        top: 250vh;
+      }
 
-            h4 {
-                top: 350vh;
-            }
+      h4 {
+        top: 350vh;
+      }
 
-            .slider {
-                height: auto;
-                /* width: 100dvw; */
-                perspective: 4000px;
-                left: 50%;
-                display: flex;
-                overflow-x: visible;
-                flex-flow: row nowrap;
-            }
+      .slider {
+        width: 100dvw;
+        /* height: 600px; */
+        margin-top: 2000px;
+        overflow-x: visible;
+        position: relative;
+        flex-flow: row nowrap;
 
-            .slider {
-                cursor: move; /* fallback if grab cursor is unsupported */
-                cursor: grab;
-                cursor: -moz-grab;
-                cursor: -webkit-grab;
-            }
+        perspective: 4000px;
 
-            /* (Optional) Apply a "closed-hand" cursor during drag operation. */
-            .slider:active {
-                cursor: grabbing;
-                cursor: -moz-grabbing;
-                cursor: -webkit-grabbing;
-            }
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+      }
 
-            .item-wrapper {
-                height: 300px;
+      .slider-inner {
+        /* width: 60rem; */
+        width: 100%;
+        height: 100%;
+        padding: 1.75rem;
+        display: flex;
+        position: absolute;
+        left: 50%;
 
-                transform-style: preserve-3d;
-            }
+        cursor: move;
+        cursor: grab;
+        cursor: -moz-grab;
+        cursor: -webkit-grab;
 
-            .item-wrapper .image-wrapper {
-                width: 100%;
-                height: 100%;
-                border-radius: 20px;
-            }
+        transform-style: preserve-3d;
+      }
 
-            .item-wrapper img {
-                object-fit: cover;
-            }
-        </style>
-    </head>
-    <body>
-        <div id="root"></div>
-        <div class="inner">
-            <h1>SANDBOX</h1>
-            <h2>SANDBOX</h2>
-            <h3>SANDBOX</h3>
-            <h4>SANDBOX</h4>
-        </div>
+      /* (Optional) Apply a "closed-hand" cursor during drag operation. */
+      .slider-inner:active {
+        cursor: grabbing;
+        cursor: -moz-grabbing;
+        cursor: -webkit-grabbing;
+      }
 
-        <div class="three_root"></div>
+      .item-wrapper {
+        position: absolute;
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
-        <script type="module" src="./vl_slider.js"></script>
-        <!-- <script type="module" src="./vl_slider.js"></script> -->
-    </body>
+        padding: 1.75rem;
+
+        /* position: absolute; */
+        /* transform-style: preserve-3d; */
+      }
+
+      .item-wrapper .image-wrapper {
+        width: 100%;
+
+        border-radius: 50px;
+      }
+
+      .item-wrapper .image,
+      .item-wrapper .image-wrapper {
+        border-radius: 20px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      .item-wrapper .image-wrapper {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .person-meta {
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translate(-50%, 3rem);
+
+        text-transform: uppercase;
+        font-family: sans-serif;
+      }
+
+      .person-meta span {
+        display: block;
+      }
+
+      .person-meta .person-name {
+        color: rgb(0, 0, 255);
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        font-weight: 900;
+        opacity: 0;
+        transform: translateY(100px);
+        transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        /* margin-bottom: 6rem; */
+      }
+
+      .item-wrapper:hover .person-name,
+      .item-wrapper:hover .person-function {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .item-wrapper:hover .image-wrapper {
+        transform: scale(1.05);
+      }
+
+      .image-wrapper {
+        transition: transform 1s cubic-bezier(0.23, 1, 0.32, 1);
+      }
+
+      .item-wrapper:active .person-name,
+      .item-wrapper:active .person-function {
+        opacity: 0;
+        transform: translateY(100px);
+      }
+
+      .person-meta .person-function {
+        opacity: 0;
+        transition: all 0.8s 0.1s cubic-bezier(0.23, 1, 0.32, 1);
+        transform: translateY(100px);
+        font-size: 2rem;
+        color: rgb(0, 0, 0);
+      }
+
+      .person-meta .person-data {
+        opacity: 0;
+        font-size: 2rem;
+        color: rgb(0, 0, 0);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <div class="inner">
+      <h1>SANDBOX</h1>
+      <h2>SANDBOX</h2>
+      <h3>SANDBOX</h3>
+      <h4>SANDBOX</h4>
+    </div>
+
+    <div class="three_root"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script type="module" src="./vl_slider.js"></script>
+    <!-- <script type="module" src="./vl_slider.js"></script> -->
+  </body>
 </html>

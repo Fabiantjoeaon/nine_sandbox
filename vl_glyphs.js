@@ -298,6 +298,7 @@ async function main() {
         const el = document.querySelector(glyph.element);
 
         if (!el) {
+            glyph.__mesh.visible = false;
             return console.warn(`No element ${glyph.element}`);
         }
 
@@ -306,7 +307,7 @@ async function main() {
         const boundingBox = el.getBoundingClientRect();
 
         if (!boundingBox.width || !boundingBox.height) {
-            glyph.visible = false;
+            glyph.__mesh.visible = false;
             console.warn(
                 `${glyph.element} has no bounding box information, the object has been removed from the scene`
             );
