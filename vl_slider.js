@@ -63,42 +63,42 @@ async function main() {
 
   const data = [
     {
-      src: "https://picsum.photos/1000?random=1",
+      src: "https://picsum.photos/2400?random=1",
       name: "Lisa De Jong",
       function: "HR",
     },
     {
-      src: "https://picsum.photos/1000?random=2",
+      src: "https://picsum.photos/2400?random=2",
       name: "Lisa De Jong",
       function: "HR",
     },
     {
-      src: "https://picsum.photos/1000?random=3",
+      src: "https://picsum.photos/2400?random=3",
       name: "Lisa De Jong",
       function: "HR",
     },
     {
-      src: "https://picsum.photos/1000?random=4",
+      src: "https://picsum.photos/2400?random=4",
       name: "Lisa De Jong",
       function: "HR",
     },
     {
-      src: "https://picsum.photos/1000?random=5",
+      src: "https://picsum.photos/2400?random=5",
       name: "Lisa De Jong",
       function: "HR",
     },
     {
-      src: "https://picsum.photos/1000?random=6",
+      src: "https://picsum.photos/2400?random=6",
       name: "Lisa De Jong",
       function: "HR",
     },
     {
-      src: "https://picsum.photos/1000?random=6",
+      src: "https://picsum.photos/2400?random=6",
       name: "Lisa De Jong",
       function: "HR",
     },
     {
-      src: "https://picsum.photos/1000?random=6",
+      src: "https://picsum.photos/2400?random=6",
       name: "Lisa De Jong",
       function: "HR",
     },
@@ -243,7 +243,7 @@ async function main() {
         item.style.visibility = "visible";
       }
 
-      image.style.transform = `scale(1.3) translateX(${__dragVelX * 60}px)`;
+      image.style.transform = `scale(1.6) translateX(${__dragVelX * 10000}px)`;
     });
   }
 
