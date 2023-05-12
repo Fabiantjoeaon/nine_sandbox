@@ -3,9 +3,13 @@ import {
   DragGesture,
 } from "https://cdn.skypack.dev/@use-gesture/vanilla";
 
-window.onload = function () {
-  main();
-};
+window.addEventListener(
+  "load",
+  function (event) {
+    main();
+  },
+  false
+);
 
 async function main() {
   const clamp = (val, min, max) => {

@@ -7,9 +7,13 @@ window.onbeforeunload = function () {
   window.scrollTo(0, 0);
 };
 
-window.onload = function () {
-  main();
-};
+window.addEventListener(
+  "load",
+  function (event) {
+    main();
+  },
+  false
+);
 
 async function main() {
   const IS_DEBUG = window.location.port.length > 0;
