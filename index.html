@@ -91,9 +91,7 @@
 
       .slider {
         width: 100dvw;
-        /* height: 600px; */
-        margin-top: 2000px;
-        overflow-x: visible;
+
         position: relative;
         flex-flow: row nowrap;
 
@@ -102,7 +100,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        overflow: hidden;
       }
 
       .slider-inner {
@@ -165,10 +162,11 @@
         position: absolute;
         top: 100%;
         left: 50%;
-        transform: translate(-50%, 3rem);
+        transform: translate(-50%, 1rem);
 
         text-transform: uppercase;
         font-family: sans-serif;
+        white-space: nowrap;
       }
 
       .person-meta span {
@@ -177,7 +175,7 @@
 
       .person-meta .person-name {
         color: rgb(0, 0, 255);
-        font-size: 4rem;
+        font-size: 3rem;
         margin-bottom: 1rem;
         font-weight: 900;
         opacity: 0;
@@ -193,7 +191,7 @@
       }
 
       .item-wrapper:hover .image-wrapper {
-        transform: scale(1.05);
+        transform: scale(1.02);
       }
 
       .image-wrapper {

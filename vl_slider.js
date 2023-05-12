@@ -3,8 +3,6 @@ import {
   DragGesture,
 } from "https://cdn.skypack.dev/@use-gesture/vanilla";
 
-const dragSpeed = 4;
-
 const clamp = (val, min, max) => {
   return val > max ? max : val < min ? min : val;
 };
@@ -86,16 +84,12 @@ const data = [
     name: "Lisa De Jong",
     function: "HR",
   },
+  {
+    src: "https://picsum.photos/1000?random=6",
+    name: "Lisa De Jong",
+    function: "HR",
+  },
 ];
-
-new ScrollGesture(window, (state) => {
-  const [_, velY] = state.velocity;
-  const [__, dirY] = state.direction;
-  _scrollVelY = velY;
-  //   if (!state.down) _scrollVelY = 0;
-
-  //   _scrollVelY = velY;
-});
 
 let _scale = 1;
 let __scale = 1;
@@ -110,31 +104,25 @@ let __scrollVelY = 0;
 let currentX = 0;
 let _currentX = currentX;
 
-let itemWidth = 1000;
-const radiusMult = 1.3;
-const radius = itemWidth * radiusMult;
-
-const offset = 80;
-//const gap = 30;
-let totalWidth = itemWidth * data.length;
+let itemWidth, radiusMult, offset, dragSpeed, radius;
+// let totalWidth = itemWidth * data.length;
 
 const slider = document.createElement("div");
 slider.style.height = `${itemWidth}px`;
 slider.classList.add("slider");
-//slider.style.gap = `${gap}px`;
 
 const inner = document.createElement("div");
 inner.classList.add("slider-inner");
 slider.appendChild(inner);
 
-function handleBounds() {
-  const diff = _currentX - currentX;
+// function handleBounds() {
+//   const diff = _currentX - currentX;
 
-  if (currentX > totalWidth || currentX * -1 > totalWidth) {
-    currentX = diff;
-    _currentX = diff;
-  }
-}
+//   if (currentX > totalWidth || currentX * -1 > totalWidth) {
+//     currentX = diff;
+//     _currentX = diff;
+//   }
+// }
 
 new DragGesture(slider, (state) => {
   const [velX] = state.velocity;
@@ -150,13 +138,21 @@ new DragGesture(slider, (state) => {
   // TODO: Maybe in loop
 });
 
-const images = [];
+new ScrollGesture(window, (state) => {
+  const [_, velY] = state.velocity;
+  const [__, dirY] = state.direction;
+  _scrollVelY = velY;
+  //   if (!state.down) _scrollVelY = 0;
+
+  //   _scrollVelY = velY;
+});
+
+const itemWrappers = [];
 
 data.forEach((item, i) => {
   const itemWrapper = document.createElement("div");
   itemWrapper.classList.add("item-wrapper");
-  itemWrapper.style.width = `${itemWidth}px`;
-  itemWrapper.style.height = `${itemWidth * (9 / 16)}px`;
+  itemWrappers.push(itemWrapper);
 
   const imageWrapper = document.createElement("div");
   imageWrapper.classList.add("image-wrapper");
@@ -187,12 +183,9 @@ data.forEach((item, i) => {
   const personData = document.createElement("span");
   personData.classList.add("person-data");
   metaWrapper.appendChild(personData);
-  //   name.innerText = item.function
 
   itemWrapper.appendChild(metaWrapper);
 });
-
-inner.style.transform = `translateX(${itemWidth / -2 - radius * 0.05}px)`;
 
 const step = (2 * Math.PI) / inner.children.length;
 
@@ -207,10 +200,12 @@ function render() {
   _scale = down ? 0.95 : 1;
   __scale = lerp(__scale, _scale, 0.1);
 
-  let rotY = _currentX * -0.01;
+  let rotY = _currentX * -1;
 
   // Always in range of 360 deg
   rotY = rotY % (step * itemWidth);
+
+  inner.style.transform = `translateX(${itemWidth / -2 - radius * 0.05}px)`;
 
   inner.children.forEach((item, i) => {
     const image = item.children[0].children[0];
@@ -235,9 +230,39 @@ function render() {
       item.style.visibility = "visible";
     }
 
-    image.style.transform = `scale(1.5) translateX(${__dragVelX * 60}px)`;
+    image.style.transform = `scale(1.3) translateX(${__dragVelX * 60}px)`;
   });
 }
+
+function onResize() {
+  // TODO:
+  //   itemWidth = 1000;
+  //   radiusMult = 1.3;
+  //   offset = 80;
+  // inner,children.forEach(() => {
+  // clean up css and use just --var
+  // })
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  const minW = 400;
+  const maxW = 2600;
+
+  itemWidth = map(w, minW, maxW, 200, 1000);
+  radiusMult = map(w, minW, maxW, 1.1, 1.4);
+  radius = itemWidth * radiusMult;
+  offset = 80;
+  dragSpeed = 0.02;
+
+  itemWrappers.forEach((item) => {
+    item.style.width = `${itemWidth}px`;
+    item.style.height = `${itemWidth * 0.75}px`;
+  });
+  // This also changes perspective
+  slider.style.height = `${itemWidth * 1.1}px`;
+}
+
+onResize();
+window.addEventListener("resize", onResize);
 
 render();
 
