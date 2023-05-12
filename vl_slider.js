@@ -267,7 +267,7 @@ async function main() {
       item.style.height = `${itemWidth * 0.75}px`;
     });
     // This also changes perspective
-    slider.style.height = `${itemWidth * 1.1}px`;
+    slider.style.height = `${itemWidth * 0.9}px`;
   }
 
   onResize();

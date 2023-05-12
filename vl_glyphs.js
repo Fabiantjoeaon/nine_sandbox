@@ -347,6 +347,7 @@ async function main() {
   }
 
   function animateIn() {
+    console.log(glyphs);
     glyphs.forEach((glyph, i) => {
       const _obj = { value: 0 };
 
