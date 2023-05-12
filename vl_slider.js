@@ -46,7 +46,7 @@ function map(
 }
 
 const IS_DEBUG = window.location.port.length > 0;
-const TARGET_ELEMENT = ".inner";
+const TARGET_ELEMENT = IS_DEBUG ? ".inner" : ".3d-slider";
 
 const data = [
   {
