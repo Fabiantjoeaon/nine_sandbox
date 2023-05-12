@@ -485,8 +485,6 @@ async function main() {
       emissive: VAN_LOON_BLUE_EMISSIVE,
     });
 
-    setGlyphPositionBasedOnDOM(glyph);
-
     // Used only to apply initial position and later on as initial ref point
     const initialGroup = new THREE.Group();
     // Used for mouse move and scroll interactions
@@ -507,6 +505,7 @@ async function main() {
 
     glyph.__animationGroup.scale.setScalar(0);
 
+    setGlyphPositionBasedOnDOM(glyph);
     copyGlyphContainerTransforms(glyph);
 
     glyph.__animationGroup.add(glyphScene);
