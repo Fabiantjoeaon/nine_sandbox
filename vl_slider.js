@@ -3,6 +3,54 @@ import {
   DragGesture,
 } from "https://cdn.skypack.dev/@use-gesture/vanilla";
 
+const debugData = [
+  {
+    src: "https://picsum.photos/2400?random=1",
+    name: "Lisa De Jong",
+    function: "HR",
+  },
+  {
+    src: "https://picsum.photos/2400?random=2",
+    name: "Lisa De Jong",
+    function: "HR",
+  },
+  {
+    src: "https://picsum.photos/2400?random=3",
+    name: "Lisa De Jong",
+    function: "HR",
+  },
+  {
+    src: "https://picsum.photos/2400?random=4",
+    name: "Lisa De Jong",
+    function: "HR",
+  },
+  {
+    src: "https://picsum.photos/2400?random=5",
+    name: "Lisa De Jong",
+    function: "HR",
+  },
+  {
+    src: "https://picsum.photos/2400?random=6",
+    name: "Lisa De Jong",
+    function: "HR",
+  },
+  {
+    src: "https://picsum.photos/2400?random=6",
+    name: "Lisa De Jong",
+    function: "HR",
+  },
+  {
+    src: "https://picsum.photos/2400?random=6",
+    name: "Lisa De Jong",
+    function: "HR",
+  },
+  {
+    src: "https://picsum.photos/2400?random=6",
+    name: "Lisa De Jong",
+    function: "HR",
+  },
+];
+
 window.addEventListener(
   "load",
   function (event) {
@@ -33,7 +81,7 @@ async function main() {
 
   function scrapeDataFromWebFlowPage() {
     const DATA_CLASS = ".slider_data";
-    const items = document.querySelectorAll(DATA_CLASS);
+    const items = document.querySelectorAll(`${DATA_CLASS}_wrapper`);
 
     const data = items.map((item) => {
       const name = item.querySelector(`${DATA_CLASS}_name`);
@@ -86,55 +134,7 @@ async function main() {
   const IS_DEBUG = window.location.port.length > 0;
   const TARGET_ELEMENT = IS_DEBUG ? ".inner" : ".vl-3d-slider";
 
-  const data = IS_DEBUG
-    ? [
-        {
-          src: "https://picsum.photos/2400?random=1",
-          name: "Lisa De Jong",
-          function: "HR",
-        },
-        {
-          src: "https://picsum.photos/2400?random=2",
-          name: "Lisa De Jong",
-          function: "HR",
-        },
-        {
-          src: "https://picsum.photos/2400?random=3",
-          name: "Lisa De Jong",
-          function: "HR",
-        },
-        {
-          src: "https://picsum.photos/2400?random=4",
-          name: "Lisa De Jong",
-          function: "HR",
-        },
-        {
-          src: "https://picsum.photos/2400?random=5",
-          name: "Lisa De Jong",
-          function: "HR",
-        },
-        {
-          src: "https://picsum.photos/2400?random=6",
-          name: "Lisa De Jong",
-          function: "HR",
-        },
-        {
-          src: "https://picsum.photos/2400?random=6",
-          name: "Lisa De Jong",
-          function: "HR",
-        },
-        {
-          src: "https://picsum.photos/2400?random=6",
-          name: "Lisa De Jong",
-          function: "HR",
-        },
-        {
-          src: "https://picsum.photos/2400?random=6",
-          name: "Lisa De Jong",
-          function: "HR",
-        },
-      ]
-    : scrapeDataFromWebFlowPage();
+  const data = IS_DEBUG ? debugData : scrapeDataFromWebFlowPage();
 
   let _scale = 1;
   let __scale = 1;
