@@ -535,17 +535,17 @@ async function main() {
 
     glyphs.forEach((glyph, i) => {
       // Rotation on mouse move
-      const influence = 0.001;
+      const influence = 0.01;
       glyph.__interactionGroup.rotation.z = THREE.MathUtils.lerp(
         glyph.__interactionGroup.rotation.z,
-        glyph.__initialGroup.rotation.z -
-          _mouseMoveVelocity.y * (glyph.__rand * 0.4),
-        influence + glyph.__rand * i * influence
+        glyph.__initialGroup.rotation.z - _mouseMoveVelocity.y,
+        influence
+        // influence + glyph.__rand * i * influence
       );
       glyph.__interactionGroup.rotation.y = THREE.MathUtils.lerp(
         glyph.__interactionGroup.rotation.y,
-        glyph.__initialGroup.rotation.y - _mouseMoveVelocity.x * glyph.__rand,
-        influence + glyph.__rand * i * influence
+        glyph.__initialGroup.rotation.y - _mouseMoveVelocity.x,
+        influence
       );
       // glyph.__interactionGroup.rotation.x = THREE.MathUtils.lerp(
       //     glyph.__interactionGroup.rotation.x,
@@ -554,9 +554,9 @@ async function main() {
       // );
       //glyph.__interactionGroup.rotation.x += __scrollVelY * 0.001;
 
-      let idleT = Math.sin(t * 0.5 + i * 20);
+      let idleT = Math.sin(t * 0.5 + i * 50);
       // Normalize -1 - 1 to 0 - 1
-      idleT = (idleT + 1) * 0.5;
+      idleT = (idleT + 1) * 0.9;
       idleT = idleT;
       glyph.__interactionGroup.position.y =
         glyph.__initialGroup.position.y + idleT;

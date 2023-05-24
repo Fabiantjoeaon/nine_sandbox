@@ -11,6 +11,9 @@ window.addEventListener(
   false
 );
 
+// TODO:
+// https://discourse.webflow.com/t/how-do-you-store-use-secret-api-key-data/178977/12
+
 async function main() {
   const clamp = (val, min, max) => {
     return val > max ? max : val < min ? min : val;
@@ -102,6 +105,11 @@ async function main() {
       name: "Lisa De Jong",
       function: "HR",
     },
+    {
+      src: "https://picsum.photos/2400?random=6",
+      name: "Lisa De Jong",
+      function: "HR",
+    },
   ];
 
   let _scale = 1;
@@ -141,12 +149,15 @@ async function main() {
     const [velX] = state.velocity;
     const [dirX] = state.direction;
 
-    if (down !== state.down) {
-      down = state.down;
+    // let d = state.down;
+    let d = state.down || state.dragging;
+
+    if (down !== d) {
+      down = d;
     }
 
     _dragVelX = velX * dragSpeed * dirX;
-    if (!state.down) _dragVelX = 0;
+    if (!d) _dragVelX = 0;
 
     // TODO: Maybe in loop
   });
@@ -218,7 +229,9 @@ async function main() {
     // Always in range of 360 deg
     rotY = rotY % (step * itemWidth);
 
-    inner.style.transform = `translateX(${itemWidth / -2 - radius * 0.05}px)`;
+    inner.style.transform = `translateX(${
+      itemWidth / -2 - radius * 0.05
+    }px) rotateZ(${Math.PI * -0.07}rad)`;
 
     inner.children.forEach((item, i) => {
       const image = item.children[0].children[0];
@@ -243,7 +256,17 @@ async function main() {
         item.style.visibility = "visible";
       }
 
-      image.style.transform = `scale(1.6) translateX(${__dragVelX * 10000}px)`;
+      const input = 400;
+      const output = 100;
+      const moveInnerX = map(
+        __dragVelX * 10000,
+        -input,
+        input,
+        -output,
+        output,
+        true
+      );
+      image.style.transform = `scale(1.4) translateX(${moveInnerX}px)`;
     });
   }
 
@@ -260,11 +283,14 @@ async function main() {
     const minW = 400;
     const maxW = 2600;
 
-    itemWidth = map(w, minW, maxW, 200, 1000);
-    radiusMult = map(w, minW, maxW, 1.1, 1.4);
+    itemWidth = map(w, minW, maxW, 300, 1000);
+    // 8 items
+    // radiusMult = map(w, minW, maxW, 1.1, 1.4);
+    // 9 items
+    radiusMult = map(w, minW, maxW, 1.4, 1.5);
     radius = itemWidth * radiusMult;
     offset = 80;
-    dragSpeed = 0.02;
+    dragSpeed = map(w, maxW, minW, 0.05, 0.12);
 
     itemWrappers.forEach((item) => {
       item.style.width = `${itemWidth}px`;
