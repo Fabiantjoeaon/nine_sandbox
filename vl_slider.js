@@ -256,7 +256,7 @@ async function main() {
 
     inner.style.transform = `translateX(${
       itemWidth / -2 - radius * 0.05
-    }px) rotateZ(${Math.PI * -0.07}rad)`;
+    }px) rotateZ(${Math.PI * -0.04}rad)`;
 
     inner.children.forEach((item, i) => {
       const image = item.children[0].children[0];
@@ -291,7 +291,7 @@ async function main() {
         output,
         true
       );
-      image.style.transform = `scale(1.4) translateX(${moveInnerX}px)`;
+      //image.style.transform = `scale(1.4) translateX(${moveInnerX}px)`;
     });
   }
 
