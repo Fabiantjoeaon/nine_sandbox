@@ -11,9 +11,6 @@ window.addEventListener(
   false
 );
 
-// TODO:
-// https://discourse.webflow.com/t/how-do-you-store-use-secret-api-key-data/178977/12
-
 async function main() {
   const clamp = (val, min, max) => {
     return val > max ? max : val < min ? min : val;
@@ -21,6 +18,7 @@ async function main() {
 
   NodeList.prototype.forEach = Array.prototype.forEach;
   HTMLCollection.prototype.forEach = Array.prototype.forEach;
+  HTMLCollection.prototype.map = Array.prototype.map;
   Element.prototype.prependChild = function (newElement) {
     return this.insertBefore(newElement, this.firstChild);
   };
@@ -31,6 +29,30 @@ async function main() {
       var cln = item.cloneNode(true);
       parent.appendChild(cln);
     });
+  }
+
+  function scrapeDataFromWebFlowPage() {
+    const DATA_CLASS = ".slider_data";
+    const items = document.querySelectorAll(DATA_CLASS);
+
+    const data = items.map((item) => {
+      const name = item.querySelector(`${DATA_CLASS}_name`);
+      const image = item.querySelector(`${DATA_CLASS}_image`);
+      const itemFn = item.querySelector(`${DATA_CLASS}_function`);
+
+      return {
+        src: image.getAttribute("src"),
+        name: name.innerText,
+        function: itemFn.innerText,
+      };
+    });
+    //
+
+    for (let i = items.length; i--; ) {
+      items[i].remove();
+    }
+
+    return data;
   }
 
   function lerp(start, end, amt) {
@@ -64,53 +86,55 @@ async function main() {
   const IS_DEBUG = window.location.port.length > 0;
   const TARGET_ELEMENT = IS_DEBUG ? ".inner" : ".vl-3d-slider";
 
-  const data = [
-    {
-      src: "https://picsum.photos/2400?random=1",
-      name: "Lisa De Jong",
-      function: "HR",
-    },
-    {
-      src: "https://picsum.photos/2400?random=2",
-      name: "Lisa De Jong",
-      function: "HR",
-    },
-    {
-      src: "https://picsum.photos/2400?random=3",
-      name: "Lisa De Jong",
-      function: "HR",
-    },
-    {
-      src: "https://picsum.photos/2400?random=4",
-      name: "Lisa De Jong",
-      function: "HR",
-    },
-    {
-      src: "https://picsum.photos/2400?random=5",
-      name: "Lisa De Jong",
-      function: "HR",
-    },
-    {
-      src: "https://picsum.photos/2400?random=6",
-      name: "Lisa De Jong",
-      function: "HR",
-    },
-    {
-      src: "https://picsum.photos/2400?random=6",
-      name: "Lisa De Jong",
-      function: "HR",
-    },
-    {
-      src: "https://picsum.photos/2400?random=6",
-      name: "Lisa De Jong",
-      function: "HR",
-    },
-    {
-      src: "https://picsum.photos/2400?random=6",
-      name: "Lisa De Jong",
-      function: "HR",
-    },
-  ];
+  const data = IS_DEBUG
+    ? [
+        {
+          src: "https://picsum.photos/2400?random=1",
+          name: "Lisa De Jong",
+          function: "HR",
+        },
+        {
+          src: "https://picsum.photos/2400?random=2",
+          name: "Lisa De Jong",
+          function: "HR",
+        },
+        {
+          src: "https://picsum.photos/2400?random=3",
+          name: "Lisa De Jong",
+          function: "HR",
+        },
+        {
+          src: "https://picsum.photos/2400?random=4",
+          name: "Lisa De Jong",
+          function: "HR",
+        },
+        {
+          src: "https://picsum.photos/2400?random=5",
+          name: "Lisa De Jong",
+          function: "HR",
+        },
+        {
+          src: "https://picsum.photos/2400?random=6",
+          name: "Lisa De Jong",
+          function: "HR",
+        },
+        {
+          src: "https://picsum.photos/2400?random=6",
+          name: "Lisa De Jong",
+          function: "HR",
+        },
+        {
+          src: "https://picsum.photos/2400?random=6",
+          name: "Lisa De Jong",
+          function: "HR",
+        },
+        {
+          src: "https://picsum.photos/2400?random=6",
+          name: "Lisa De Jong",
+          function: "HR",
+        },
+      ]
+    : scrapeDataFromWebFlowPage();
 
   let _scale = 1;
   let __scale = 1;
@@ -297,7 +321,7 @@ async function main() {
       item.style.height = `${itemWidth * 0.75}px`;
     });
     // This also changes perspective
-    slider.style.height = `${itemWidth * 1.1}px`;
+    slider.style.height = `${itemWidth * 1.2}px`;
   }
 
   onResize();
