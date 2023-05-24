@@ -66,7 +66,6 @@ async function main() {
 
   NodeList.prototype.forEach = Array.prototype.forEach;
   HTMLCollection.prototype.forEach = Array.prototype.forEach;
-  HTMLCollection.prototype.map = Array.prototype.map;
   Element.prototype.prependChild = function (newElement) {
     return this.insertBefore(newElement, this.firstChild);
   };
@@ -83,7 +82,9 @@ async function main() {
     const DATA_CLASS = ".slider_data";
     const items = document.querySelectorAll(`${DATA_CLASS}_wrapper`);
 
-    const data = items.map((item) => {
+    console.log("ITEMS", items);
+
+    const data = [...items].map((item) => {
       const name = item.querySelector(`${DATA_CLASS}_name`);
       const image = item.querySelector(`${DATA_CLASS}_image`);
       const itemFn = item.querySelector(`${DATA_CLASS}_function`);
