@@ -3,6 +3,8 @@ import {
   DragGesture,
 } from "https://cdn.skypack.dev/@use-gesture/vanilla";
 
+let isMobile = "ontouchstart" in document.documentElement;
+
 const debugData = [
   {
     src: "https://picsum.photos/2400?random=1",
@@ -177,6 +179,8 @@ async function main() {
     // let d = state.down;
     let d = state.down || state.dragging;
 
+    console.log(state);
+
     if (down !== d) {
       down = d;
     }
@@ -242,7 +246,7 @@ async function main() {
     requestAnimationFrame(render);
 
     currentX += _dragVelX;
-    _currentX = lerp(_currentX, currentX, 0.05);
+    _currentX = lerp(_currentX, currentX, isMobile ? 0.2 : 0.05);
     __dragVelX = lerp(__dragVelX, _dragVelX, 0.01);
     __scrollVelY = lerp(__scrollVelY, _scrollVelY, 0.01);
 
@@ -308,7 +312,7 @@ async function main() {
     const minW = 400;
     const maxW = 2600;
 
-    itemWidth = map(w, minW, maxW, 300, 1000);
+    itemWidth = map(w, minW, maxW, 400, 1000);
     // 8 items
     // radiusMult = map(w, minW, maxW, 1.1, 1.4);
     // 9 items
@@ -316,6 +320,7 @@ async function main() {
     radius = itemWidth * radiusMult;
     offset = 80;
     dragSpeed = map(w, maxW, minW, 0.05, 0.12);
+    if (isMobile) dragSpeed *= 2.5;
 
     itemWrappers.forEach((item) => {
       item.style.width = `${itemWidth}px`;

@@ -49,43 +49,7 @@
       }
 
       .three_root {
-        position: fixed;
-        width: 100dwv;
-        height: 100dvh;
-        z-index: 99;
-      }
-
-      .inner h1,
-      .inner h2,
-      .inner h3,
-      .inner h4 {
-        position: absolute;
-        font-family: sans-serif;
-        font-size: 4rem;
-        left: 50%;
-        perspective: 4000px;
-        transform: translate(-50%);
-        color: #fff;
-        text-align: center;
-
-        padding: 100px 200px;
-        border-radius: 15px;
-      }
-
-      h1 {
-        top: 40vh;
-      }
-
-      h2 {
-        top: 150vh;
-      }
-
-      h3 {
-        top: 250vh;
-      }
-
-      h4 {
-        top: 350vh;
+        pointer-events: none;
       }
 
       .slider {
@@ -99,7 +63,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        touch-action: pan-x;
+        overflow-x: hidden;
+        overflow-y: hidden;
       }
 
       .slider-inner {
@@ -117,6 +82,9 @@
         cursor: -webkit-grab;
 
         transform-style: preserve-3d;
+
+        -ms-overflow-style: none; /* Internet Explorer 10+ */
+        scrollbar-width: none; /* Firefox */
       }
 
       /* (Optional) Apply a "closed-hand" cursor during drag operation. */
@@ -143,7 +111,6 @@
 
       .item-wrapper .image,
       .item-wrapper .image-wrapper {
-        border-radius: 20px;
         position: absolute;
         top: 0;
         left: 0;
@@ -158,15 +125,20 @@
         overflow: hidden;
       }
 
+      .image-wrapper .image {
+        border-radius: 50px;
+      }
+
       .person-meta {
         position: absolute;
         top: 100%;
         left: 50%;
-        transform: translate(-50%, 1rem);
+        transform: translate(-50%, 3rem);
 
         text-transform: uppercase;
         font-family: sans-serif;
         white-space: nowrap;
+        max-width: 75%;
       }
 
       .person-meta span {
@@ -176,11 +148,12 @@
       .person-meta .person-name {
         color: rgb(0, 0, 255);
         font-size: 3rem;
-        margin-bottom: 1rem;
+        margin-bottom: 2rem;
         font-weight: 900;
         opacity: 0;
         transform: translateY(100px);
         transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        font-family: "UniNeue Black", sans-serif;
         /* margin-bottom: 6rem; */
       }
 
@@ -210,12 +183,25 @@
         transform: translateY(100px);
         font-size: 2rem;
         color: rgb(0, 0, 0);
+        font-family: "UniNeue Book", sans-serif;
       }
 
       .person-meta .person-data {
         opacity: 0;
         font-size: 2rem;
         color: rgb(0, 0, 0);
+      }
+
+      @media only screen and (max-width: 1000px) {
+        .person-meta {
+          font-size: 1.8rem;
+        }
+      }
+
+      @media only screen and (max-width: 600px) {
+        .person-meta {
+          font-size: 1.4rem;
+        }
       }
     </style>
   </head>
