@@ -84,7 +84,7 @@ async function main() {
       type: "A",
 
       element: IS_DEBUG ? "h3" : ".GLYPH-A-2",
-      elementOffset: new THREE.Vector3(7.2, 1.5, 0),
+      elementOffset: new THREE.Vector3(7.8, 1.5, 0),
       elementPositionX: "top",
       elementPositionY: "right",
 
@@ -109,7 +109,7 @@ async function main() {
       type: "N",
 
       element: IS_DEBUG ? "h3" : ".GLYPH-N-1",
-      elementOffset: new THREE.Vector3(1, -0.2, 0),
+      elementOffset: new THREE.Vector3(-1, -0.2, 0),
       elementPositionX: "top",
       elementPositionY: "right",
 
@@ -134,7 +134,7 @@ async function main() {
       type: "A",
 
       element: IS_DEBUG ? "h3" : ".GLYPH-A-3",
-      elementOffset: new THREE.Vector3(1.9, -0.1, 0),
+      elementOffset: new THREE.Vector3(3.3, -0.1, 0),
       elementPositionX: "top",
       elementPositionY: "right",
 
@@ -182,7 +182,7 @@ async function main() {
       // OK
       type: "A",
 
-      element: IS_DEBUG ? "h3" : ".GLYPH-A-4",
+      element: IS_DEBUG ? "h3" : ".GLYPH-A-5",
       elementOffset: new THREE.Vector3(-1.5, 1.1, 0),
       elementPositionX: "bottom",
       elementPositionY: "left",

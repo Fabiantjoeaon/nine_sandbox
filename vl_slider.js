@@ -72,19 +72,9 @@ async function main() {
     return this.insertBefore(newElement, this.firstChild);
   };
 
-  function duplicateChildNodes(parent, append = true) {
-    var children = parent.childNodes;
-    children.forEach(function (item) {
-      var cln = item.cloneNode(true);
-      parent.appendChild(cln);
-    });
-  }
-
   function scrapeDataFromWebFlowPage() {
     const DATA_CLASS = ".slider_data";
     const items = document.querySelectorAll(`${DATA_CLASS}_wrapper`);
-
-    console.log("ITEMS", items);
 
     const data = [...items].map((item) => {
       const name = item.querySelector(`${DATA_CLASS}_name`);
@@ -97,7 +87,6 @@ async function main() {
         function: itemFn.innerText,
       };
     });
-    //
 
     for (let i = items.length; i--; ) {
       items[i].remove();
@@ -153,7 +142,6 @@ async function main() {
   let _currentX = currentX;
 
   let itemWidth, radiusMult, offset, dragSpeed, radius;
-  // let totalWidth = itemWidth * data.length;
 
   const slider = document.createElement("div");
   slider.style.height = `${itemWidth}px`;
@@ -163,23 +151,13 @@ async function main() {
   inner.classList.add("slider-inner");
   slider.appendChild(inner);
 
-  // function handleBounds() {
-  //   const diff = _currentX - currentX;
-
-  //   if (currentX > totalWidth || currentX * -1 > totalWidth) {
-  //     currentX = diff;
-  //     _currentX = diff;
-  //   }
-  // }
-
   new DragGesture(slider, (state) => {
     const [velX] = state.velocity;
     const [dirX] = state.direction;
 
     // let d = state.down;
-    let d = state.down || state.dragging;
 
-    console.log(state);
+    let d = state.down || state.dragging;
 
     if (down !== d) {
       down = d;
@@ -195,9 +173,6 @@ async function main() {
     const [_, velY] = state.velocity;
     const [__, dirY] = state.direction;
     _scrollVelY = velY;
-    //   if (!state.down) _scrollVelY = 0;
-
-    //   _scrollVelY = velY;
   });
 
   const itemWrappers = [];
@@ -238,6 +213,10 @@ async function main() {
     metaWrapper.appendChild(personData);
 
     itemWrapper.appendChild(metaWrapper);
+
+    // itemWrapper.addEventListener("mouseover", (e) => {
+    //   console.log("hover", e.target);
+    // });
   });
 
   const step = (2 * Math.PI) / inner.children.length;
@@ -279,10 +258,15 @@ async function main() {
         scale(${__scale * -1}, ${__scale})
     `;
 
+      let nextViz = 1;
       if (rotYItem > -offset && rotYItem < offset) {
-        item.style.visibility = "hidden";
+        nextViz = 0;
       } else {
-        item.style.visibility = "visible";
+        nextViz = 1;
+      }
+
+      if (nextViz !== item.style.opacity) {
+        item.style.opacity = nextViz;
       }
 
       const input = 400;
@@ -320,7 +304,7 @@ async function main() {
     radius = itemWidth * radiusMult;
     offset = 80;
     dragSpeed = map(w, maxW, minW, 0.05, 0.12);
-    if (isMobile) dragSpeed *= 2.5;
+    if (isMobile) dragSpeed *= 1.5;
 
     itemWrappers.forEach((item) => {
       item.style.width = `${itemWidth}px`;
