@@ -267,6 +267,10 @@ async function main() {
 
       if (nextViz !== item.style.opacity) {
         item.style.opacity = nextViz;
+        if (nextViz === 0) {
+          item.style.pointerEvents = "none";
+        }
+        if (nextViz === 1) item.style.pointerEvents = "all";
       }
 
       const input = 400;
