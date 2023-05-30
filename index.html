@@ -46,6 +46,7 @@
 
       .inner * {
         user-select: none;
+        -webkit-touch-callout: none;
       }
 
       .three_root {
@@ -83,6 +84,7 @@
 
         transform-style: preserve-3d;
 
+        touch-action: pan-x;
         -ms-overflow-style: none; /* Internet Explorer 10+ */
         scrollbar-width: none; /* Firefox */
       }
@@ -183,14 +185,18 @@
       }
 
       @media only screen and (max-width: 1000px) {
-        .person-meta {
-          font-size: 1.8rem;
+        .person-meta,
+        .person-name,
+        .person-function {
+          font-size: 1.8rem !important;
         }
       }
 
       @media only screen and (max-width: 600px) {
-        .person-meta {
-          font-size: 1.4rem;
+        .person-meta,
+        .person-name,
+        .person-function {
+          font-size: 1.4rem !important;
         }
       }
     </style>

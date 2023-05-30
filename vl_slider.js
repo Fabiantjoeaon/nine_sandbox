@@ -269,8 +269,14 @@ async function main() {
         item.style.opacity = nextViz;
         if (nextViz === 0) {
           item.style.pointerEvents = "none";
+          item.style.visibility = "hidden";
+          // item.style.touchAction = "none";
         }
-        if (nextViz === 1) item.style.pointerEvents = "all";
+        if (nextViz === 1) {
+          item.style.visibility = "visible";
+          item.style.pointerEvents = "all";
+          // item.style.touchAction = "none";
+        }
       }
 
       const input = 400;
@@ -308,7 +314,7 @@ async function main() {
     radius = itemWidth * radiusMult;
     offset = 80;
     dragSpeed = map(w, maxW, minW, 0.05, 0.12);
-    if (isMobile) dragSpeed *= 1.5;
+    if (isMobile) dragSpeed *= 2.5;
 
     itemWrappers.forEach((item) => {
       item.style.width = `${itemWidth}px`;
