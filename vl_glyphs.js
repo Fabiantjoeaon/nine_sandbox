@@ -3,6 +3,170 @@ import { GLTFLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/l
 
 import { Gesture } from "https://cdn.skypack.dev/@use-gesture/vanilla";
 
+const IS_DEBUG = window.location.port.length > 0;
+const GLYPH_FROM_ROTATION = Math.PI * -2;
+
+const GLYPH_SRC = [
+  {
+    name: "A",
+    src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/64594108c63b66596e225d15_a_glyph_van_loon.gltf.txt",
+  },
+  {
+    name: "O",
+    src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/64594108626c3017a92bfeaf_o_glyph_van_loon.gltf.txt",
+  },
+  {
+    name: "N",
+    src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/645941081911cd17ae54d71f_n_glyph_van_loon.gltf.txt",
+  },
+  {
+    name: "L",
+    src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/645941088474694b20fbd33d_l_glyph_van_loon.gltf.txt",
+  },
+  {
+    name: "V",
+    src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/6459410800413fdec23ab65c_v_glyph_van_loon.gltf.txt",
+  },
+];
+
+const glyphs = [
+  // TEMP: for testing distance
+  // {
+  //   type: "O",
+  //   element: IS_DEBUG ? "h3" : ".GLYPH-O-5",
+  //   elementOffset: new THREE.Vector3(5, 2, 0),
+  //   overridePosition: new THREE.Vector3(0, 0, 0),
+  //   elementPositionX: "top",
+  //   elementPositionY: "right",
+  //   rotation: new THREE.Euler(0.2, -Math.PI, 1),
+  //   //scale: 0.5,
+  // },
+
+  {
+    // OK
+    type: "A",
+    element: IS_DEBUG ? "h1" : ".GLYPH-A-1",
+    elementOffset: new THREE.Vector3(2.3, 0.5, 0),
+    elementPositionX: "left",
+    elementPositionY: "top",
+    rotation: new THREE.Euler(-0.1, Math.PI - GLYPH_FROM_ROTATION, 0.4),
+    //scale: 0.5,
+  },
+  {
+    // OK
+    type: "O",
+    element: IS_DEBUG ? "h2" : ".GLYPH-O-1",
+    elementOffset: new THREE.Vector3(1.3, -1.2, 0),
+    elementPositionX: "right",
+    elementPositionY: "bottom",
+    rotation: new THREE.Euler(0.3, 0.1),
+    //scale: 0.5,
+  },
+  {
+    // OK
+    type: "L",
+    element: IS_DEBUG ? "h3" : ".GLYPH-L-1",
+    elementOffset: new THREE.Vector3(1.6, -0.4, 0),
+    elementPositionX: "top",
+    elementPositionY: "left",
+    rotation: new THREE.Euler(0.8, 0.3, 0),
+    //scale: 0.6,
+  },
+  {
+    type: "A",
+    element: IS_DEBUG ? "h3" : ".GLYPH-A-2",
+    elementOffset: new THREE.Vector3(8.2, 1.5, 0),
+    elementPositionX: "top",
+    elementPositionY: "right",
+    rotation: new THREE.Euler(0.7, Math.PI + GLYPH_FROM_ROTATION, 0.4),
+    //scale: 0.4,
+  },
+  // {
+  //     type: "O",
+  //     element: IS_DEBUG ? "h3" : ".GLYPH-O-2",
+  //     elementOffset: new THREE.Vector3(0.6, -0.4, 0),
+  //     elementPositionX: "bottom",
+  //     elementPositionY: "left",
+  //     rotation: new THREE.Euler(-0.1, Math.PI - GLYPH_FROM_ROTATION, 0.4),
+  //     //scale: 0.4,
+  // },
+  {
+    // OK
+    type: "N",
+    element: IS_DEBUG ? "h1" : ".GLYPH-N-1",
+    elementOffset: new THREE.Vector3(-1, -0.2, 0),
+    elementPositionX: "top",
+    elementPositionY: "right",
+    rotation: new THREE.Euler(-0.1, Math.PI - GLYPH_FROM_ROTATION, 0.4),
+    //scale: 0.4,
+  },
+  // {
+  //     type: "L",
+  //     element: IS_DEBUG ? "h3" : ".GLYPH-L-2",
+  //     elementOffset: new THREE.Vector3(0.3, 0, 0),
+  //     elementPositionX: "top",
+  //     elementPositionY: "left",
+  //     rotation: new THREE.Euler(-0.2, Math.PI + GLYPH_FROM_ROTATION, 0.4),
+  ////     scale: 0.5,
+  // },
+  {
+    // OK
+    type: "A",
+    element: IS_DEBUG ? "h3" : ".GLYPH-A-3",
+    elementOffset: new THREE.Vector3(3.3, -0.1, 0),
+    elementPositionX: "top",
+    elementPositionY: "right",
+    rotation: new THREE.Euler(-0.2, Math.PI, 1),
+    //scale: 0.5,
+  },
+  {
+    type: "O",
+    element: IS_DEBUG ? "h2" : ".GLYPH-O-3",
+    elementOffset: new THREE.Vector3(0, 0.1, 0),
+    elementPositionX: "top",
+    elementPositionY: "right",
+    rotation: new THREE.Euler(0.2, -Math.PI, 1),
+    //scale: 0.5,
+  },
+  {
+    type: "O",
+    element: IS_DEBUG ? "h3" : ".GLYPH-O-4",
+    elementOffset: new THREE.Vector3(0, 0.1, 0),
+    elementPositionX: "top",
+    elementPositionY: "left",
+    rotation: new THREE.Euler(0.2, -Math.PI, 1),
+    //scale: 0.5,
+  },
+  {
+    // OK
+    type: "A",
+    element: IS_DEBUG ? "h1" : ".GLYPH-A-5",
+    elementOffset: new THREE.Vector3(-1.5, 1.1, 0),
+    elementPositionX: "top",
+    elementPositionY: "right",
+    rotation: new THREE.Euler(0.2, -Math.PI, 1),
+    //scale: 0.5,
+  },
+  {
+    type: "O",
+    element: IS_DEBUG ? "h3" : ".GLYPH-O-5",
+    elementOffset: new THREE.Vector3(5, 2, 0),
+    elementPositionX: "top",
+    elementPositionY: "right",
+    rotation: new THREE.Euler(0.2, -Math.PI, 1),
+    //scale: 0.5,
+  },
+].map((g) => ({
+  ...g,
+  position: new THREE.Vector3(),
+  __mesh: null,
+  __interactionGroup: null,
+  __rand: Math.random(),
+  __objIn: { value: 0 },
+  // Webflow converts classes to lowercase
+  element: g.element.toLowerCase(),
+}));
+
 window.onbeforeunload = function () {
   window.scrollTo(0, 0);
 };
@@ -16,191 +180,6 @@ window.addEventListener(
 );
 
 async function main() {
-  const IS_DEBUG = window.location.port.length > 0;
-  const GLYPH_FROM_ROTATION = Math.PI * -2;
-
-  const GLYPH_SRC = [
-    {
-      name: "A",
-      src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/64594108c63b66596e225d15_a_glyph_van_loon.gltf.txt",
-    },
-    {
-      name: "O",
-      src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/64594108626c3017a92bfeaf_o_glyph_van_loon.gltf.txt",
-    },
-    {
-      name: "N",
-      src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/645941081911cd17ae54d71f_n_glyph_van_loon.gltf.txt",
-    },
-    {
-      name: "L",
-      src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/645941088474694b20fbd33d_l_glyph_van_loon.gltf.txt",
-    },
-    {
-      name: "V",
-      src: "https://uploads-ssl.webflow.com/603379589922195849a7718c/6459410800413fdec23ab65c_v_glyph_van_loon.gltf.txt",
-    },
-  ];
-
-  const glyphs = [
-    {
-      // OK
-      type: "A",
-
-      element: IS_DEBUG ? "h1" : ".GLYPH-A-1",
-      elementOffset: new THREE.Vector3(2.3, 0.5, 0),
-      elementPositionX: "left",
-      elementPositionY: "top",
-
-      rotation: new THREE.Euler(-0.1, Math.PI - GLYPH_FROM_ROTATION, 0.4),
-      //scale: 0.5,
-    },
-    {
-      // OK
-      type: "O",
-
-      element: IS_DEBUG ? "h2" : ".GLYPH-O-1",
-      elementOffset: new THREE.Vector3(1.3, -1.2, 0),
-      elementPositionX: "right",
-      elementPositionY: "bottom",
-
-      rotation: new THREE.Euler(0.3, 0.1),
-      //scale: 0.5,
-    },
-    {
-      // OK
-      type: "L",
-
-      element: IS_DEBUG ? "h3" : ".GLYPH-L-1",
-      elementOffset: new THREE.Vector3(1.6, -0.4, 0),
-      elementPositionX: "top",
-      elementPositionY: "left",
-
-      rotation: new THREE.Euler(0.8, 0.3, 0),
-      //scale: 0.6,
-    },
-
-    {
-      type: "A",
-
-      element: IS_DEBUG ? "h3" : ".GLYPH-A-2",
-      elementOffset: new THREE.Vector3(7.8, 1.5, 0),
-      elementPositionX: "top",
-      elementPositionY: "right",
-
-      rotation: new THREE.Euler(0.7, Math.PI + GLYPH_FROM_ROTATION, 0.4),
-      //scale: 0.4,
-    },
-
-    // {
-    //     type: "O",
-
-    //     element: IS_DEBUG ? "h3" : ".GLYPH-O-2",
-    //     elementOffset: new THREE.Vector3(0.6, -0.4, 0),
-    //     elementPositionX: "bottom",
-    //     elementPositionY: "left",
-
-    //     rotation: new THREE.Euler(-0.1, Math.PI - GLYPH_FROM_ROTATION, 0.4),
-    //     //scale: 0.4,
-    // },
-
-    {
-      // OK
-      type: "N",
-
-      element: IS_DEBUG ? "h3" : ".GLYPH-N-1",
-      elementOffset: new THREE.Vector3(-1, -0.2, 0),
-      elementPositionX: "top",
-      elementPositionY: "right",
-
-      rotation: new THREE.Euler(-0.1, Math.PI - GLYPH_FROM_ROTATION, 0.4),
-      //scale: 0.4,
-    },
-
-    // {
-    //     type: "L",
-
-    //     element: IS_DEBUG ? "h3" : ".GLYPH-L-2",
-    //     elementOffset: new THREE.Vector3(0.3, 0, 0),
-    //     elementPositionX: "top",
-    //     elementPositionY: "left",
-
-    //     rotation: new THREE.Euler(-0.2, Math.PI + GLYPH_FROM_ROTATION, 0.4),
-    ////     scale: 0.5,
-    // },
-
-    {
-      // OK
-      type: "A",
-
-      element: IS_DEBUG ? "h3" : ".GLYPH-A-3",
-      elementOffset: new THREE.Vector3(3.3, -0.1, 0),
-      elementPositionX: "top",
-      elementPositionY: "right",
-
-      rotation: new THREE.Euler(-0.2, Math.PI, 1),
-      //scale: 0.5,
-    },
-
-    {
-      type: "O",
-
-      element: IS_DEBUG ? "h3" : ".GLYPH-O-3",
-      elementOffset: new THREE.Vector3(0, 0.1, 0),
-      elementPositionX: "top",
-      elementPositionY: "right",
-
-      rotation: new THREE.Euler(0.2, -Math.PI, 1),
-      //scale: 0.5,
-    },
-
-    {
-      type: "O",
-
-      element: IS_DEBUG ? "h3" : ".GLYPH-O-4",
-      elementOffset: new THREE.Vector3(0, 0.1, 0),
-      elementPositionX: "top",
-      elementPositionY: "left",
-
-      rotation: new THREE.Euler(0.2, -Math.PI, 1),
-      //scale: 0.5,
-    },
-
-    {
-      type: "O",
-
-      element: IS_DEBUG ? "h3" : ".GLYPH-O-5",
-      elementOffset: new THREE.Vector3(5, 2, 0),
-      elementPositionX: "top",
-      elementPositionY: "right",
-
-      rotation: new THREE.Euler(0.2, -Math.PI, 1),
-      //scale: 0.5,
-    },
-
-    {
-      // OK
-      type: "A",
-
-      element: IS_DEBUG ? "h3" : ".GLYPH-A-5",
-      elementOffset: new THREE.Vector3(-1.5, 1.1, 0),
-      elementPositionX: "bottom",
-      elementPositionY: "left",
-
-      rotation: new THREE.Euler(0.2, -Math.PI, 1),
-      //scale: 0.5,
-    },
-  ].map((g) => ({
-    ...g,
-    position: new THREE.Vector3(),
-    __mesh: null,
-    __interactionGroup: null,
-    __rand: Math.random(),
-    __objIn: { value: 0 },
-    // Webflow converts classes to lowercase
-    element: g.element.toLowerCase(),
-  }));
-
   const ENV_MAP_PATH =
     "https://uploads-ssl.webflow.com/603379589922195849a7718c/644ed7aeae089038fc622679_envmap.jpg";
   const VAN_LOON_BLUE_COLOR = new THREE.Color("rgb(0,0,105)");
@@ -235,6 +214,29 @@ async function main() {
 
   const mouseMoveVelocity = new THREE.Vector3();
   const _mouseMoveVelocity = new THREE.Vector3();
+
+  const raycaster = new THREE.Raycaster();
+  const pointer = new THREE.Vector3();
+
+  function onPointerMove(event) {
+    // calculate pointer position in normalized device coordinates
+    // (-1 to +1) for both components
+    // pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+    // pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    const initialY = THREE.MathUtils.mapLinear(
+      event.clientY,
+      0,
+      window.innerHeight,
+      -1,
+      1
+    );
+
+    pointer.set(
+      THREE.MathUtils.mapLinear(event.clientX, 0, window.innerWidth, -1, 1),
+      initialY + pixelsToUnits(window.scrollY)
+    );
+  }
 
   const gesture = new Gesture(window, {
     onScroll: (state) => {
@@ -329,8 +331,6 @@ async function main() {
       pixelsToUnits(window.innerHeight / 2)
     );
 
-    const half = pixelsToUnits(boundingBox.width / 2);
-
     glyph.position.x +=
       pixelsToUnits(el.offsetLeft) + glyph.elementOffset.x + posOffsetX;
 
@@ -351,7 +351,6 @@ async function main() {
   }
 
   function animateIn() {
-    console.log(glyphs);
     glyphs.forEach((glyph, i) => {
       const _obj = { value: 0 };
 
@@ -379,6 +378,7 @@ async function main() {
     envMapPromise,
   ]).finally(() => {
     // setTimeout(() => {
+
     animateIn();
     // }, 1000);
   });
@@ -498,6 +498,8 @@ async function main() {
     glyph.__interactionGroup = interactionGroup;
     glyph.__animationGroup = animationGroup;
 
+    glyph.__worldPos = new THREE.Vector3();
+
     // Pos will be handled in loop,
     // if we handle it here we'll get a weird offset from origin
     glyphScene.scale.setScalar(0.6);
@@ -505,7 +507,9 @@ async function main() {
 
     glyph.__animationGroup.scale.setScalar(0);
 
-    setGlyphPositionBasedOnDOM(glyph);
+    if (glyph.overridePosition)
+      glyph.__mesh.position.copy(glyph.overridePosition);
+    else setGlyphPositionBasedOnDOM(glyph);
     copyGlyphContainerTransforms(glyph);
 
     glyph.__animationGroup.add(glyphScene);
@@ -533,40 +537,60 @@ async function main() {
 
     //camera.position.y -= pixelsToUnits(_scrollVelY);
 
-    glyphs.forEach((glyph, i) => {
-      // Rotation on mouse move
-      const influence = 0.01;
-      glyph.__interactionGroup.rotation.z = THREE.MathUtils.lerp(
-        glyph.__interactionGroup.rotation.z,
-        glyph.__initialGroup.rotation.z - _mouseMoveVelocity.y,
-        influence
-        // influence + glyph.__rand * i * influence
-      );
-      glyph.__interactionGroup.rotation.y = THREE.MathUtils.lerp(
-        glyph.__interactionGroup.rotation.y,
-        glyph.__initialGroup.rotation.y - _mouseMoveVelocity.x,
-        influence
-      );
-      // glyph.__interactionGroup.rotation.x = THREE.MathUtils.lerp(
-      //     glyph.__interactionGroup.rotation.x,
-      //     glyph.__initialGroup.rotation.x - _scrollVelY * 0.1,
-      //     0.01
-      // );
-      //glyph.__interactionGroup.rotation.x += __scrollVelY * 0.001;
+    // const mousePos =
+    // console.log();
 
-      let idleT = Math.sin(t * 0.5 + i * 50);
+    glyphs.forEach((glyph, i) => {
+      let idleT = Math.sin(t * 0.1 + i * 20);
       // Normalize -1 - 1 to 0 - 1
-      idleT = (idleT + 1) * 0.9;
+      idleT = (idleT + 1) * 0.5;
       idleT = idleT;
       glyph.__interactionGroup.position.y =
         glyph.__initialGroup.position.y + idleT;
+
       glyph.__interactionGroup.rotation.z += idleT * 0.01;
+
+      // const currentPos = glyph.position.add(glyph.__interactionGroup.position);
+
+      glyph.__mesh.getWorldPosition(glyph.__worldPos);
+      const distance = glyph.__worldPos.distanceTo(pointer);
+
+      // console.log(distance);
+
+      // console.log(glyph.position);
+
+      // console.log(currentPos);
+
+      // dist Y is off by mesh half height
+      if (distance < 1) {
+        // console.log("HERE");
+        // // Rotation on mouse move
+        // const influence = 0.01;
+
+        // TODO: Always lerp but only set value when in distance
+        // glyph.__interactionGroup.rotation.z = THREE.MathUtils.lerp(
+        //   glyph.__interactionGroup.rotation.z,
+        //   glyph.__initialGroup.rotation.z - _mouseMoveVelocity.y,
+        //   1
+        //   // influence + glyph.__rand * i * influence
+        // );
+        // glyph.__interactionGroup.rotation.y = THREE.MathUtils.lerp(
+        //   glyph.__interactionGroup.rotation.y,
+        //   glyph.__initialGroup.rotation.y - _mouseMoveVelocity.x,
+        //   1
+        // );
+        // glyph.__mesh.material.color.setCSSString("red");
+        glyph.__mesh.scale.setScalar(1.2);
+      } else {
+        glyph.__mesh.scale.setScalar(0.4);
+      }
     });
   }
 
   render();
 
   window.addEventListener("resize", onWindowResize, false);
+  window.addEventListener("pointermove", onPointerMove);
 
   function onWindowResize() {
     glyphs.forEach((glyph) => {

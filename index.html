@@ -34,7 +34,7 @@
 
         height: 450vh;
         z-index: 1;
-        background-color: #fff;
+        background-color: rgb(100, 100, 100);
         color: #fff;
         position: absolute;
         width: 100dvw;
@@ -50,6 +50,7 @@
       }
 
       .three_root {
+        z-index: 99;
         pointer-events: none;
       }
 
@@ -136,12 +137,15 @@
 
         text-transform: uppercase;
         font-family: sans-serif;
-        white-space: nowrap;
-        max-width: 75%;
+
+        max-width: 100%;
+
+        line-height: 3rem;
       }
 
       .person-meta span {
         display: block;
+        word-wrap: break-word;
       }
 
       .person-meta .person-name {
@@ -190,6 +194,10 @@
         .person-function {
           font-size: 1.8rem !important;
         }
+
+        .person-meta {
+          line-height: 1.8rem;
+        }
       }
 
       @media only screen and (max-width: 600px) {
@@ -198,13 +206,35 @@
         .person-function {
           font-size: 1.4rem !important;
         }
+
+        .person-meta {
+          transform: translate(-50%, 1rem) !important;
+          line-height: 1rem;
+        }
+
+        .person-name {
+          margin-bottom: 1rem !important;
+        }
+      }
+
+      /* DONT COPY FOR LIVE SITE */
+      .inner {
+        z-index: -1;
+        text-align: center;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin-bottom: 50vw;
       }
     </style>
   </head>
   <body>
     <div id="root"></div>
     <div class="inner">
-      <h1>SANDBOX</h1>
+      <h3>SANDBOX</h3>
+
       <h2>SANDBOX</h2>
       <h3>SANDBOX</h3>
       <h4>SANDBOX</h4>
@@ -214,6 +244,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
     <script type="module" src="./vl_slider.js"></script>
-    <!-- <script type="module" src="./vl_glyphs.js"></script> -->
+    <script type="module" src="./vl_glyphs.js"></script>
   </body>
 </html>

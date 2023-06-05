@@ -10,46 +10,55 @@ const debugData = [
     src: "https://picsum.photos/2400?random=1",
     name: "Lisa De Jong",
     function: "HR",
+    url: "#1",
   },
   {
     src: "https://picsum.photos/2400?random=2",
     name: "Lisa De Jong",
     function: "HR",
+    url: "#2",
   },
   {
     src: "https://picsum.photos/2400?random=3",
     name: "Lisa De Jong",
     function: "HR",
+    url: "#3",
   },
   {
     src: "https://picsum.photos/2400?random=4",
     name: "Lisa De Jong",
     function: "HR",
+    url: "#4",
   },
   {
     src: "https://picsum.photos/2400?random=5",
     name: "Lisa De Jong",
     function: "HR",
+    url: "#1",
   },
   {
     src: "https://picsum.photos/2400?random=6",
     name: "Lisa De Jong",
     function: "HR",
+    url: "#1",
   },
   {
     src: "https://picsum.photos/2400?random=6",
     name: "Lisa De Jong",
     function: "HR",
+    url: "#1",
   },
   {
     src: "https://picsum.photos/2400?random=6",
     name: "Lisa De Jong",
     function: "HR",
+    url: "#1",
   },
   {
     src: "https://picsum.photos/2400?random=6",
     name: "Lisa De Jong",
     function: "HR",
+    url: "#1",
   },
 ];
 
@@ -79,12 +88,14 @@ async function main() {
     const data = [...items].map((item) => {
       const name = item.querySelector(`${DATA_CLASS}_name`);
       const image = item.querySelector(`${DATA_CLASS}_image`);
-      const itemFn = item.querySelector(`${DATA_CLASS}_function`);
+      const url = item.querySelector(`${DATA_CLASS}_link`);
+      // const itemFn = item.querySelector(`${DATA_CLASS}_function`);
 
       return {
         src: image.getAttribute("src"),
         name: name.innerText,
-        function: itemFn.innerText,
+        url: url.getAttribute("href"),
+        // function: itemFn.innerText,
       };
     });
 
@@ -178,7 +189,9 @@ async function main() {
   const itemWrappers = [];
 
   data.forEach((item, i) => {
-    const itemWrapper = document.createElement("div");
+    const itemWrapper = document.createElement("a");
+    itemWrapper.setAttribute("href", item.url);
+    itemWrapper.setAttribute("draggable", false);
     itemWrapper.classList.add("item-wrapper");
     itemWrappers.push(itemWrapper);
 
@@ -203,10 +216,10 @@ async function main() {
     metaWrapper.appendChild(name);
     name.innerText = item.name;
 
-    const fn = document.createElement("span");
-    fn.classList.add("person-function");
-    metaWrapper.appendChild(fn);
-    fn.innerText = item.function;
+    // const fn = document.createElement("span");
+    // fn.classList.add("person-function");
+    // metaWrapper.appendChild(fn);
+    // fn.innerText = item.function;
 
     const personData = document.createElement("span");
     personData.classList.add("person-data");
