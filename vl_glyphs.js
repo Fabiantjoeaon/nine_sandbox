@@ -562,28 +562,28 @@ async function main() {
       // console.log(currentPos);
 
       // dist Y is off by mesh half height
-      if (distance < 1) {
-        // console.log("HERE");
-        // // Rotation on mouse move
-        // const influence = 0.01;
+      // if (distance < 1) {
+      //   // console.log("HERE");
+      //   // // Rotation on mouse move
+      //   // const influence = 0.01;
 
-        // TODO: Always lerp but only set value when in distance
-        // glyph.__interactionGroup.rotation.z = THREE.MathUtils.lerp(
-        //   glyph.__interactionGroup.rotation.z,
-        //   glyph.__initialGroup.rotation.z - _mouseMoveVelocity.y,
-        //   1
-        //   // influence + glyph.__rand * i * influence
-        // );
-        // glyph.__interactionGroup.rotation.y = THREE.MathUtils.lerp(
-        //   glyph.__interactionGroup.rotation.y,
-        //   glyph.__initialGroup.rotation.y - _mouseMoveVelocity.x,
-        //   1
-        // );
-        // glyph.__mesh.material.color.setCSSString("red");
-        glyph.__mesh.scale.setScalar(1.2);
-      } else {
-        glyph.__mesh.scale.setScalar(0.4);
-      }
+      //   // TODO: Always lerp but only set value when in distance
+      //   // glyph.__interactionGroup.rotation.z = THREE.MathUtils.lerp(
+      //   //   glyph.__interactionGroup.rotation.z,
+      //   //   glyph.__initialGroup.rotation.z - _mouseMoveVelocity.y,
+      //   //   1
+      //   //   // influence + glyph.__rand * i * influence
+      //   // );
+      //   // glyph.__interactionGroup.rotation.y = THREE.MathUtils.lerp(
+      //   //   glyph.__interactionGroup.rotation.y,
+      //   //   glyph.__initialGroup.rotation.y - _mouseMoveVelocity.x,
+      //   //   1
+      //   // );
+      //   // glyph.__mesh.material.color.setCSSString("red");
+      //   glyph.__mesh.scale.setScalar(1.2);
+      // } else {
+      //   glyph.__mesh.scale.setScalar(0.4);
+      // }
     });
   }
 

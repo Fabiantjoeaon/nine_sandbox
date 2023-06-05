@@ -119,7 +119,7 @@ async function main() {
       // };
     });
 
-    await Promise.all(promises);
+    const data = await Promise.all(promises);
 
     for (let i = items.length; i--; ) {
       items[i].remove();
