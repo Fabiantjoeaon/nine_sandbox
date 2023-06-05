@@ -81,23 +81,45 @@ async function main() {
     return this.insertBefore(newElement, this.firstChild);
   };
 
-  function scrapeDataFromWebFlowPage() {
+  function waitForImage(imgElem) {
+    return new Promise((res) => {
+      if (imgElem.complete) {
+        return res();
+      }
+      imgElem.onload = () => res();
+      imgElem.onerror = () => res();
+    });
+  }
+
+  async function scrapeDataFromWebFlowPage() {
     const DATA_CLASS = ".slider_data";
     const items = document.querySelectorAll(`${DATA_CLASS}_wrapper`);
 
-    const data = [...items].map((item) => {
+    const promises = [...items].map(async (item) => {
       const name = item.querySelector(`${DATA_CLASS}_name`);
       const image = item.querySelector(`${DATA_CLASS}_image`);
       const url = item.querySelector(`${DATA_CLASS}_link`);
+
+      await waitForImage(image);
       // const itemFn = item.querySelector(`${DATA_CLASS}_function`);
 
-      return {
-        src: image.getAttribute("src"),
-        name: name.innerText,
-        url: url.getAttribute("href"),
-        // function: itemFn.innerText,
-      };
+      return new Promise((res, rej) => {
+        res({
+          src: image.getAttribute("src"),
+          name: name.innerText,
+          url: url.getAttribute("href"),
+          // function: itemFn.innerText,
+        });
+      });
+      // return {
+      //   src: image.getAttribute("src"),
+      //   name: name.innerText,
+      //   url: url.getAttribute("href"),
+      //   // function: itemFn.innerText,
+      // };
     });
+
+    await Promise.all(promises);
 
     for (let i = items.length; i--; ) {
       items[i].remove();
@@ -137,7 +159,7 @@ async function main() {
   const IS_DEBUG = window.location.port.length > 0;
   const TARGET_ELEMENT = IS_DEBUG ? ".inner" : ".vl-3d-slider";
 
-  const data = IS_DEBUG ? debugData : scrapeDataFromWebFlowPage();
+  const data = IS_DEBUG ? debugData : await scrapeDataFromWebFlowPage();
 
   let _scale = 1;
   let __scale = 1;
@@ -170,6 +192,12 @@ async function main() {
 
     let d = state.down || state.dragging;
 
+    // TODO: https://stackoverflow.com/questions/58353280/prevent-click-when-leave-drag-to-scroll-in-js
+    if (d) {
+      [...document.querySelectorAll(".item-wrapper")].forEach((el) => {
+        el.classList.add("disable");
+      });
+    }
     if (down !== d) {
       down = d;
     }
