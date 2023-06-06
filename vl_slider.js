@@ -382,7 +382,7 @@ async function main() {
     // 8 items
     // radiusMult = map(w, minW, maxW, 1.1, 1.4);
     // 9 items
-    radiusMult = map(w, minW, maxW, 1.3, 1.4);
+    radiusMult = map(w, minW, maxW, 1.2, 1.32);
     radius = itemWidth * radiusMult;
     offset = 80;
     dragSpeed = map(w, maxW, minW, 0.05, 0.12);
