@@ -101,7 +101,6 @@ async function main() {
       const url = item.querySelector(`${DATA_CLASS}_link`);
 
       await waitForImage(image);
-      // const itemFn = item.querySelector(`${DATA_CLASS}_function`);
 
       return new Promise((res, rej) => {
         res({
@@ -111,12 +110,6 @@ async function main() {
           // function: itemFn.innerText,
         });
       });
-      // return {
-      //   src: image.getAttribute("src"),
-      //   name: name.innerText,
-      //   url: url.getAttribute("href"),
-      //   // function: itemFn.innerText,
-      // };
     });
 
     const data = await Promise.all(promises);
@@ -154,6 +147,11 @@ async function main() {
         Math.max(newMin, newMax)
       );
     return newValue;
+  }
+
+  function preventClick(e) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
   }
 
   const IS_DEBUG = window.location.port.length > 0;
@@ -260,6 +258,39 @@ async function main() {
     // });
   });
 
+  // Prevents click when dragging
+  let isDown = false;
+  let isDragging = false;
+
+  slider.addEventListener("mousedown", (e) => {
+    isDown = true;
+  });
+
+  slider.addEventListener("mouseleave", () => {
+    isDown = false;
+  });
+
+  slider.addEventListener("mouseup", (e) => {
+    isDown = false;
+    const elements = document.getElementsByClassName("item-wrapper");
+    if (isDragging) {
+      for (let i = 0; i < elements.length; i++) {
+        elements[i].addEventListener("click", preventClick);
+      }
+    } else {
+      for (let i = 0; i < elements.length; i++) {
+        elements[i].removeEventListener("click", preventClick);
+      }
+    }
+    isDragging = false;
+  });
+
+  slider.addEventListener("mousemove", (e) => {
+    if (!isDown) return;
+    isDragging = true;
+    e.preventDefault();
+  });
+
   const step = (2 * Math.PI) / inner.children.length;
 
   function render() {
@@ -270,8 +301,8 @@ async function main() {
     __dragVelX = lerp(__dragVelX, _dragVelX, 0.01);
     __scrollVelY = lerp(__scrollVelY, _scrollVelY, 0.01);
 
-    _scale = down ? 0.95 : 1;
-    __scale = lerp(__scale, _scale, 0.1);
+    //_scale = down ? 0.95 : 1;
+    //__scale = lerp(__scale, _scale, 0.1);
 
     let rotY = _currentX * -1;
 
@@ -280,7 +311,7 @@ async function main() {
 
     inner.style.transform = `translateX(${
       itemWidth / -2 - radius * 0.05
-    }px) rotateZ(${Math.PI * -0.04}rad)`;
+    }px) rotateZ(${Math.PI * 0.02}rad)`;
 
     inner.children.forEach((item, i) => {
       const image = item.children[0].children[0];
@@ -321,7 +352,7 @@ async function main() {
       }
 
       const input = 400;
-      const output = 100;
+      const output = 50;
       const moveInnerX = map(
         __dragVelX * 10000,
         -input,
@@ -330,7 +361,7 @@ async function main() {
         output,
         true
       );
-      //image.style.transform = `scale(1.4) translateX(${moveInnerX}px)`;
+      image.style.transform = `scale(1.2) translateX(${moveInnerX}px)`;
     });
   }
 
@@ -351,7 +382,7 @@ async function main() {
     // 8 items
     // radiusMult = map(w, minW, maxW, 1.1, 1.4);
     // 9 items
-    radiusMult = map(w, minW, maxW, 1.4, 1.5);
+    radiusMult = map(w, minW, maxW, 1.3, 1.4);
     radius = itemWidth * radiusMult;
     offset = 80;
     dragSpeed = map(w, maxW, minW, 0.05, 0.12);
