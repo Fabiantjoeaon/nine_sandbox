@@ -212,30 +212,18 @@ async function main() {
   let _scrollVelY = 0;
   let __scrollVelY = 0;
 
+  // Glyphs that the mouse is close to
+  let activeGlyphs = [];
+
   const mouseMoveVelocity = new THREE.Vector3();
   const _mouseMoveVelocity = new THREE.Vector3();
 
   const raycaster = new THREE.Raycaster();
-  const pointer = new THREE.Vector3();
+  const mouse = new THREE.Vector2();
 
   function onPointerMove(event) {
-    // calculate pointer position in normalized device coordinates
-    // (-1 to +1) for both components
-    // pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-    // pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-    const initialY = THREE.MathUtils.mapLinear(
-      event.clientY,
-      0,
-      window.innerHeight,
-      -1,
-      1
-    );
-
-    pointer.set(
-      THREE.MathUtils.mapLinear(event.clientX, 0, window.innerWidth, -1, 1),
-      initialY + pixelsToUnits(window.scrollY)
-    );
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
   }
 
   const gesture = new Gesture(window, {
@@ -287,6 +275,7 @@ async function main() {
           glyph.src,
           (result) => {
             result.name = GLYPH_SRC[i].name;
+
             resolve(result);
           },
           null,
@@ -388,6 +377,9 @@ async function main() {
     const glyphScene = glyphResults
       .find((r) => r.name === glyph.type)
       .scene.clone();
+    glyphScene.traverse((c) => {
+      c.__ID__ = i;
+    });
 
     const glyphObj = glyphScene.children[0].children[0].children[0];
     glyphObj.geometry.center();
@@ -462,15 +454,6 @@ async function main() {
                 vec3 fresnelColor = uFresnelColor;
                 
                 gl_FragColor = mix(gl_FragColor, gl_FragColor + vec4(fresnelColor, 1.) * vec4(fresnelTerm), fresnelIntensity);
-
-                // float alpha = 1.;
-                // float cut = 0.0001;
-                // alpha *= aastep(cut, vUv.x);
-                // alpha *= 1. - aastep(1. - cut, vUv.x);
-                // alpha *= aastep(cut, vUv.x);
-                // alpha *= 1. - aastep(1. - cut, vUv.y);
-
-                // gl_FragColor.a = alpha;
         `
       );
     };
@@ -530,18 +513,22 @@ async function main() {
     //_scrollRot = THREE.MathUtils.lerp(_scrollRot, _scrollVelocity.y, 0.01);
     __scrollVelY = THREE.MathUtils.lerp(__scrollVelY, _scrollVelY, 0.1);
 
-    // const nextCameraY = THREE.MathUtils.mapLinear(window.innerHeight);
     const nextY = pixelsToUnits(_scrollPosY) * -1;
-    // camera.position.y = THREE.MathUtils.lerp(camera.position.y, nextY, 0.5);
     camera.position.y = nextY;
 
-    //camera.position.y -= pixelsToUnits(_scrollVelY);
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(scene.children, true);
 
-    // const mousePos =
-    // console.log();
+    for (let i = 0; i < intersects.length; i++) {
+      activeGlyphs = intersects.map(
+        (intersection) => intersection.object.__ID__
+      );
+    }
 
     glyphs.forEach((glyph, i) => {
-      let idleT = Math.sin(t * 0.1 + i * 20);
+      const idleSpeed = 0.2;
+      const idleAmplitude = 30;
+      let idleT = Math.sin(t * idleSpeed + i * idleAmplitude);
       // Normalize -1 - 1 to 0 - 1
       idleT = (idleT + 1) * 0.5;
       idleT = idleT;
@@ -550,40 +537,24 @@ async function main() {
 
       glyph.__interactionGroup.rotation.z += idleT * 0.01;
 
-      // const currentPos = glyph.position.add(glyph.__interactionGroup.position);
+      let toRotZ = glyph.__initialGroup.rotation.z;
+      let toRotY = glyph.__initialGroup.rotation.y;
 
-      glyph.__mesh.getWorldPosition(glyph.__worldPos);
-      const distance = glyph.__worldPos.distanceTo(pointer);
+      if (activeGlyphs.includes(i)) {
+        toRotZ -= _mouseMoveVelocity.y;
+        toRotY -= _mouseMoveVelocity.x;
+      }
 
-      // console.log(distance);
-
-      // console.log(glyph.position);
-
-      // console.log(currentPos);
-
-      // dist Y is off by mesh half height
-      // if (distance < 1) {
-      //   // console.log("HERE");
-      //   // // Rotation on mouse move
-      //   // const influence = 0.01;
-
-      //   // TODO: Always lerp but only set value when in distance
-      //   // glyph.__interactionGroup.rotation.z = THREE.MathUtils.lerp(
-      //   //   glyph.__interactionGroup.rotation.z,
-      //   //   glyph.__initialGroup.rotation.z - _mouseMoveVelocity.y,
-      //   //   1
-      //   //   // influence + glyph.__rand * i * influence
-      //   // );
-      //   // glyph.__interactionGroup.rotation.y = THREE.MathUtils.lerp(
-      //   //   glyph.__interactionGroup.rotation.y,
-      //   //   glyph.__initialGroup.rotation.y - _mouseMoveVelocity.x,
-      //   //   1
-      //   // );
-      //   // glyph.__mesh.material.color.setCSSString("red");
-      //   glyph.__mesh.scale.setScalar(1.2);
-      // } else {
-      //   glyph.__mesh.scale.setScalar(0.4);
-      // }
+      glyph.__interactionGroup.rotation.z = THREE.MathUtils.lerp(
+        glyph.__interactionGroup.rotation.z,
+        toRotZ,
+        0.01
+      );
+      glyph.__interactionGroup.rotation.y = THREE.MathUtils.lerp(
+        glyph.__interactionGroup.rotation.y,
+        toRotY,
+        0.01
+      );
     });
   }
 
