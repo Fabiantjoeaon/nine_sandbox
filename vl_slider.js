@@ -361,8 +361,8 @@ async function main() {
         output,
         true
       );
-      if (!isMobile)
-        image.style.transform = `scale(1.2) translateX(${moveInnerX}px)`;
+
+      image.style.transform = `scale(1.2) translateX(${moveInnerX}px)`;
     });
   }
 
