@@ -387,7 +387,7 @@ async function main() {
     radius = itemWidth * radiusMult;
     offset = 80;
     dragSpeed = map(w, maxW, minW, 0.05, 0.12);
-    if (isMobile) dragSpeed *= 2.5;
+    if (isMobile) dragSpeed *= 1;
 
     itemWrappers.forEach((item) => {
       item.style.width = `${itemWidth}px`;
