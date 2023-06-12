@@ -98,15 +98,17 @@ async function main() {
     const promises = [...items].map(async (item) => {
       const name = item.querySelector(`${DATA_CLASS}_name`);
       const image = item.querySelector(`${DATA_CLASS}_image`);
-      const url = item.querySelector(`${DATA_CLASS}_link`);
+      const urlEl = item.querySelector(`${DATA_CLASS}_link`);
 
       await waitForImage(image);
+
+      const url = urlEl.getAttribute("href").replace("locaties/", "");
 
       return new Promise((res, rej) => {
         res({
           src: image.getAttribute("src"),
           name: name.innerText,
-          url: url.getAttribute("href"),
+          url,
           // function: itemFn.innerText,
         });
       });
