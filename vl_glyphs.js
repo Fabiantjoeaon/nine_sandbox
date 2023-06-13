@@ -526,8 +526,8 @@ async function main() {
     }
 
     glyphs.forEach((glyph, i) => {
-      const idleSpeed = 0.2;
-      const idleAmplitude = 30;
+      const idleSpeed = 0.5;
+      const idleAmplitude = 100;
       let idleT = Math.sin(t * idleSpeed + i * idleAmplitude);
       // Normalize -1 - 1 to 0 - 1
       idleT = (idleT + 1) * 0.5;
