@@ -54,12 +54,6 @@ const debugData = [
     function: "HR",
     url: "#1",
   },
-  {
-    src: "https://picsum.photos/2400?random=6",
-    name: "Lisa De Jong",
-    function: "HR",
-    url: "#1",
-  },
 ];
 
 window.addEventListener(
@@ -211,7 +205,9 @@ async function main() {
   new ScrollGesture(window, (state) => {
     const [_, velY] = state.velocity;
     const [__, dirY] = state.direction;
-    _scrollVelY = velY;
+
+    if (!state.active) _scrollVelY = 0;
+    else _scrollVelY = velY * 0.03 * dirY;
   });
 
   const itemWrappers = [];
@@ -251,9 +247,9 @@ async function main() {
 
     const personData = document.createElement("span");
     personData.classList.add("person-data");
-    metaWrapper.appendChild(personData);
+    //metaWrapper.appendChild(personData);
 
-    itemWrapper.appendChild(metaWrapper);
+    imageWrapper.appendChild(metaWrapper);
 
     // itemWrapper.addEventListener("mouseover", (e) => {
     //   console.log("hover", e.target);
@@ -295,13 +291,19 @@ async function main() {
 
   const step = (2 * Math.PI) / inner.children.length;
 
+  //let rotY = 0;
+
   function render() {
     requestAnimationFrame(render);
 
     currentX += _dragVelX;
     _currentX = lerp(_currentX, currentX, isMobile ? 0.2 : 0.05);
     __dragVelX = lerp(__dragVelX, _dragVelX, 0.01);
-    __scrollVelY = lerp(__scrollVelY, _scrollVelY, 0.01);
+    __scrollVelY = lerp(__scrollVelY, _scrollVelY, 1);
+
+    currentX += __scrollVelY;
+
+    //console.log(__scrollVelY);
 
     //_scale = down ? 0.95 : 1;
     //__scale = lerp(__scale, _scale, 0.1);
@@ -309,7 +311,7 @@ async function main() {
     let rotY = _currentX * -1;
 
     // Always in range of 360 deg
-    rotY = rotY % (step * itemWidth);
+    //rotY = rotY % (step * itemWidth);
 
     inner.style.transform = `translateX(${
       itemWidth / -2 - radius * 0.05
