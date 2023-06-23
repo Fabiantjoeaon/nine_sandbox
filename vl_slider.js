@@ -206,7 +206,7 @@ async function main() {
     const [_, velY] = state.velocity;
     const [__, dirY] = state.direction;
 
-    const scrollVelSpeed = 0.01;
+    const scrollVelSpeed = 0.015;
     if (!state.active) _scrollVelY = 0;
     else _scrollVelY = velY * scrollVelSpeed * (dirY * -1);
   });
@@ -300,7 +300,7 @@ async function main() {
     currentX += _dragVelX;
     _currentX = lerp(_currentX, currentX, isMobile ? 0.2 : 0.05);
     __dragVelX = lerp(__dragVelX, _dragVelX, 0.01);
-    __scrollVelY = lerp(__scrollVelY, _scrollVelY, 1);
+    __scrollVelY = lerp(__scrollVelY, _scrollVelY, 0.8);
 
     currentX += __scrollVelY;
 
