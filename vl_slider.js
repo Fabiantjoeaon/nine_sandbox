@@ -206,8 +206,9 @@ async function main() {
     const [_, velY] = state.velocity;
     const [__, dirY] = state.direction;
 
+    const scrollVelSpeed = 0.01;
     if (!state.active) _scrollVelY = 0;
-    else _scrollVelY = velY * 0.03 * dirY;
+    else _scrollVelY = velY * scrollVelSpeed * (dirY * -1);
   });
 
   const itemWrappers = [];
@@ -358,7 +359,7 @@ async function main() {
       const input = 400;
       const output = 50;
       const moveInnerX = map(
-        __dragVelX * 10000,
+        __dragVelX * 20000 + _scrollVelY * 30000,
         -input,
         input,
         -output,
