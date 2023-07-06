@@ -3,6 +3,8 @@ import { GLTFLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/l
 
 import { Gesture } from "https://cdn.skypack.dev/@use-gesture/vanilla";
 
+let isMobile = "ontouchstart" in document.documentElement;
+
 const IS_DEBUG = window.location.port.length > 0;
 const GLYPH_FROM_ROTATION = Math.PI * -2;
 
@@ -167,10 +169,6 @@ const glyphs = [
   element: g.element.toLowerCase(),
 }));
 
-// window.onbeforeunload = function () {
-//   window.scrollTo(0, 0);
-// };
-
 window.addEventListener(
   "load",
   function (event) {
@@ -180,6 +178,11 @@ window.addEventListener(
 );
 
 async function main() {
+  const rootEl = document.querySelector(".three_root");
+  const shouldRenderGlyphs = rootEl && rootEl.style.display !== "none";
+
+  if (!shouldRenderGlyphs) return;
+
   const ENV_MAP_PATH =
     "https://uploads-ssl.webflow.com/603379589922195849a7718c/644ed7aeae089038fc622679_envmap.jpg";
   const VAN_LOON_BLUE_COLOR = new THREE.Color("rgb(0,0,105)");
@@ -261,7 +264,6 @@ async function main() {
 
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setClearColor(0x000000, 0);
-  const rootEl = document.querySelector(".three_root");
 
   renderer.setSize(window.innerWidth, window.innerHeight);
   rootEl.appendChild(renderer.domElement);
