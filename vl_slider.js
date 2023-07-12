@@ -188,9 +188,9 @@ async function main() {
 
     // TODO: https://stackoverflow.com/questions/58353280/prevent-click-when-leave-drag-to-scroll-in-js
     if (d) {
-      [...document.querySelectorAll(".item-wrapper")].forEach((el) => {
-        el.classList.add("disable");
-      });
+      // [...document.querySelectorAll(".item-wrapper")].forEach((el) => {
+      //   el.classList.add("disable");
+      // });
     }
     if (down !== d) {
       down = d;
@@ -261,15 +261,10 @@ async function main() {
   let isDown = false;
   let isDragging = false;
 
-  slider.addEventListener("mousedown", (e) => {
+  function handleDown(e) {
     isDown = true;
-  });
-
-  slider.addEventListener("mouseleave", () => {
-    isDown = false;
-  });
-
-  slider.addEventListener("mouseup", (e) => {
+  }
+  function handleUp(e) {
     isDown = false;
     const elements = document.getElementsByClassName("item-wrapper");
     if (isDragging) {
@@ -282,7 +277,14 @@ async function main() {
       }
     }
     isDragging = false;
-  });
+  }
+
+  slider.addEventListener("mousedown", handleDown);
+  slider.addEventListener("touchstart", handleDown);
+
+  slider.addEventListener("mouseup", handleUp);
+  slider.addEventListener("touchend", handleUp);
+  slider.addEventListener("mouseleave", handleUp);
 
   slider.addEventListener("mousemove", (e) => {
     if (!isDown) return;
