@@ -286,11 +286,12 @@ async function main() {
   slider.addEventListener("touchend", handleUp);
   slider.addEventListener("mouseleave", handleUp);
 
-  slider.addEventListener("mousemove", (e) => {
-    if (!isDown) return;
-    isDragging = true;
-    e.preventDefault();
-  });
+  // TEMP: FIX?
+  // slider.addEventListener("mousemove", (e) => {
+  //   if (!isDown) return;
+  //   isDragging = true;
+  //   e.preventDefault();
+  // });
 
   const step = (2 * Math.PI) / inner.children.length;
 
