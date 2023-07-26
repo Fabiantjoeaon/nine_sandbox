@@ -45,7 +45,6 @@
       }
 
       .inner * {
-        user-select: none;
         -webkit-touch-callout: none;
       }
 
@@ -90,6 +89,7 @@
         touch-action: pan-x;
         -ms-overflow-style: none; /* Internet Explorer 10+ */
         scrollbar-width: none; /* Firefox */
+        pointer-events: none;
       }
 
       /* (Optional) Apply a "closed-hand" cursor during drag operation. */
@@ -101,8 +101,9 @@
 
       .item-wrapper {
         position: absolute;
-
+        display: block;
         padding: 1.75rem;
+        pointer-events: auto;
       }
 
       .item-wrapper .image-wrapper {

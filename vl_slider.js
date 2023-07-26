@@ -286,12 +286,11 @@ async function main() {
   slider.addEventListener("touchend", handleUp);
   slider.addEventListener("mouseleave", handleUp);
 
-  // TEMP: FIX?
-  // slider.addEventListener("mousemove", (e) => {
-  //   if (!isDown) return;
-  //   isDragging = true;
-  //   e.preventDefault();
-  // });
+  slider.addEventListener("mousemove", (e) => {
+    if (!isDown) return;
+    isDragging = true;
+    e.preventDefault();
+  });
 
   const step = (2 * Math.PI) / inner.children.length;
 
@@ -306,11 +305,6 @@ async function main() {
     __scrollVelY = lerp(__scrollVelY, _scrollVelY, 0.8);
 
     currentX += __scrollVelY;
-
-    //console.log(__scrollVelY);
-
-    //_scale = down ? 0.95 : 1;
-    //__scale = lerp(__scale, _scale, 0.1);
 
     let rotY = _currentX * -1;
 
@@ -348,14 +342,17 @@ async function main() {
       if (nextViz !== item.style.opacity) {
         item.style.opacity = nextViz;
         if (nextViz === 0) {
-          item.style.pointerEvents = "none";
           item.style.visibility = "hidden";
+          // item.style.pointerEvents = "none";
           // item.style.touchAction = "none";
+          // item.style.zIndex = -99;
         }
         if (nextViz === 1) {
+          console.log("NEXT VIZ");
           item.style.visibility = "visible";
-          item.style.pointerEvents = "all";
-          // item.style.touchAction = "none";
+          // item.style.pointerEvents = "all";
+          // item.style.touchAction = "auto";
+          // item.style.zIndex = 0;
         }
       }
 
